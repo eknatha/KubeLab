@@ -101,7 +101,7 @@ kubectl get events --sort-by=.lastTimestamp
 
 ## 🌍 Live Demo
 
-👉 https://kubelab.eknathalabs.com
+👉 https://KubeLab.eknathalabs.com
 
 ---
 
