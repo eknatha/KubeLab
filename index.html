@@ -1,0 +1,1395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KubeLab — Kubernetes Practice Lab by EknathaLabs</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #090E1A;
+    --bg2: #0D1525;
+    --bg3: #111d35;
+    --surface: #0f1d35;
+    --surface2: #152240;
+    --border: #1e3358;
+    --border2: #254070;
+    --accent: #3B82F6;
+    --accent2: #60A5FA;
+    --accent3: #93C5FD;
+    --green: #22D3A5;
+    --green2: #10B981;
+    --yellow: #FBBF24;
+    --red: #F87171;
+    --purple: #A78BFA;
+    --text: #E2EAF8;
+    --text2: #94A8C9;
+    --text3: #5A729A;
+    --mono: 'JetBrains Mono', monospace;
+    --display: 'Syne', sans-serif;
+    --body: 'Inter', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--body);
+    overflow-x: hidden;
+    line-height: 1.6;
+  }
+
+  /* Grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(59,130,246,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(59,130,246,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(9,14,26,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+
+  .nav-logo-icon {
+    width: 32px; height: 32px;
+    background: linear-gradient(135deg, var(--accent), var(--purple));
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono);
+    font-size: 14px;
+    font-weight: 700;
+    color: white;
+  }
+
+  .nav-logo-text {
+    font-family: var(--display);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .nav-logo-text span { color: var(--accent2); }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text2);
+    text-decoration: none;
+    transition: color 0.2s;
+    letter-spacing: 0.05em;
+  }
+
+  .nav-links a:hover { color: var(--accent2); }
+
+  .nav-badge {
+    background: linear-gradient(135deg, var(--accent), var(--purple));
+    color: white;
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 6px 14px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 100px 2rem 4rem;
+    text-align: center;
+    z-index: 1;
+  }
+
+  .hero-glow {
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(59,130,246,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(59,130,246,0.1);
+    border: 1px solid rgba(59,130,246,0.3);
+    border-radius: 100px;
+    padding: 6px 16px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent2);
+    margin-bottom: 2rem;
+    animation: fadeUp 0.6s ease both;
+    letter-spacing: 0.08em;
+  }
+
+  .hero-tag::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--green);
+    border-radius: 50%;
+    animation: pulse 2s ease infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  .hero h1 {
+    font-family: var(--display);
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+    animation: fadeUp 0.6s 0.1s ease both;
+  }
+
+  .hero h1 .kube { color: var(--accent2); }
+  .hero h1 .lab {
+    background: linear-gradient(135deg, var(--green), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-size: 1.15rem;
+    color: var(--text2);
+    max-width: 560px;
+    margin: 0 auto 2.5rem;
+    animation: fadeUp 0.6s 0.2s ease both;
+    line-height: 1.7;
+  }
+
+  .hero-ctas {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    animation: fadeUp 0.6s 0.3s ease both;
+    margin-bottom: 4rem;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), #2563EB);
+    color: white;
+    padding: 12px 28px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.2s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+
+  .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--text2);
+    padding: 12px 28px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-family: var(--mono);
+    font-size: 13px;
+    border: 1px solid var(--border2);
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+
+  .btn-secondary:hover { border-color: var(--accent2); color: var(--accent2); }
+
+  /* Terminal mockup */
+  .hero-terminal {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    width: 100%;
+    max-width: 680px;
+    text-align: left;
+    overflow: hidden;
+    animation: fadeUp 0.6s 0.4s ease both;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(59,130,246,0.1);
+  }
+
+  .terminal-bar {
+    background: var(--bg3);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .dot-r { background: #F87171; }
+  .dot-y { background: #FBBF24; }
+  .dot-g { background: #34D399; }
+
+  .terminal-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text3);
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .terminal-body {
+    padding: 1.5rem;
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 2;
+  }
+
+  .t-prompt { color: var(--green); }
+  .t-cmd { color: var(--text); }
+  .t-comment { color: var(--text3); }
+  .t-out { color: var(--accent3); }
+  .t-val { color: var(--yellow); }
+  .t-err { color: var(--red); }
+  .t-success { color: var(--green); }
+  .cursor {
+    display: inline-block;
+    width: 8px; height: 14px;
+    background: var(--accent2);
+    vertical-align: middle;
+    animation: blink 1s step-end infinite;
+  }
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── STATS ── */
+  .stats {
+    position: relative;
+    z-index: 1;
+    padding: 3rem 2rem;
+    display: flex;
+    justify-content: center;
+    gap: 2px;
+    flex-wrap: wrap;
+  }
+
+  .stat {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 1.5rem 2.5rem;
+    text-align: center;
+    flex: 1;
+    min-width: 140px;
+    max-width: 200px;
+  }
+
+  .stat:first-child { border-radius: 12px 0 0 12px; }
+  .stat:last-child { border-radius: 0 12px 12px 0; }
+
+  .stat-num {
+    font-family: var(--display);
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--accent2);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .stat-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text3);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  /* ── SECTION ── */
+  section {
+    position: relative;
+    z-index: 1;
+    padding: 5rem 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-header {
+    margin-bottom: 3rem;
+  }
+
+  .section-tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent2);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-tag::before {
+    content: '';
+    width: 20px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  .section-title {
+    font-family: var(--display);
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    color: var(--text);
+  }
+
+  .section-desc {
+    color: var(--text2);
+    margin-top: 0.75rem;
+    font-size: 1rem;
+    max-width: 520px;
+  }
+
+  /* ── MODULES GRID ── */
+  .modules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .module-card {
+    background: var(--surface);
+    padding: 1.75rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    position: relative;
+  }
+
+  .module-card:hover { background: var(--surface2); }
+
+  .module-card::after {
+    content: '→';
+    position: absolute;
+    top: 1.75rem; right: 1.75rem;
+    color: var(--text3);
+    font-size: 16px;
+    transition: transform 0.2s, color 0.2s;
+  }
+
+  .module-card:hover::after {
+    transform: translateX(4px);
+    color: var(--accent2);
+  }
+
+  .module-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text3);
+    margin-bottom: 0.75rem;
+    letter-spacing: 0.08em;
+  }
+
+  .module-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .module-title {
+    font-family: var(--display);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+  }
+
+  .module-desc {
+    font-size: 0.85rem;
+    color: var(--text2);
+    line-height: 1.5;
+    margin-bottom: 1rem;
+  }
+
+  .module-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.04em;
+  }
+
+  .tag-blue { background: rgba(59,130,246,0.15); color: var(--accent3); border: 1px solid rgba(59,130,246,0.2); }
+  .tag-green { background: rgba(34,211,165,0.1); color: var(--green); border: 1px solid rgba(34,211,165,0.2); }
+  .tag-yellow { background: rgba(251,191,36,0.1); color: var(--yellow); border: 1px solid rgba(251,191,36,0.2); }
+  .tag-purple { background: rgba(167,139,250,0.1); color: var(--purple); border: 1px solid rgba(167,139,250,0.2); }
+  .tag-red { background: rgba(248,113,113,0.1); color: var(--red); border: 1px solid rgba(248,113,113,0.2); }
+
+  /* ── TOOLS SECTION ── */
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+  }
+
+  .tool-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .tool-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .tool-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+  }
+
+  .tool-icon-blue { background: rgba(59,130,246,0.15); }
+  .tool-icon-green { background: rgba(34,211,165,0.12); }
+  .tool-icon-yellow { background: rgba(251,191,36,0.12); }
+  .tool-icon-purple { background: rgba(167,139,250,0.12); }
+
+  .tool-title {
+    font-family: var(--display);
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+    color: var(--text);
+  }
+
+  .tool-desc {
+    font-size: 0.83rem;
+    color: var(--text2);
+    line-height: 1.5;
+  }
+
+  .tool-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent2);
+    margin-top: 1rem;
+    text-decoration: none;
+  }
+
+  /* ── CHEATSHEET SECTION ── */
+  .cheatsheet-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+  }
+
+  .cheat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .cheat-header {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .cheat-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .cheat-title {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text2);
+    letter-spacing: 0.05em;
+  }
+
+  .cheat-body {
+    padding: 1rem 1.25rem;
+  }
+
+  .cheat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(30,51,88,0.5);
+    gap: 1rem;
+  }
+
+  .cheat-row:last-child { border-bottom: none; }
+
+  .cheat-cmd {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--green);
+    flex: 1;
+    word-break: break-all;
+  }
+
+  .cheat-explain {
+    font-size: 11px;
+    color: var(--text3);
+    text-align: right;
+    flex-shrink: 0;
+    max-width: 140px;
+  }
+
+  /* ── QUIZ SECTION ── */
+  .quiz-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2rem;
+    max-width: 700px;
+  }
+
+  .quiz-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent2);
+    letter-spacing: 0.08em;
+    margin-bottom: 1rem;
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  .quiz-q {
+    font-family: var(--display);
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+  }
+
+  .quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 1.5rem;
+  }
+
+  .quiz-opt {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--text2);
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s, background 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .quiz-opt:hover {
+    border-color: var(--accent2);
+    color: var(--text);
+    background: rgba(59,130,246,0.08);
+  }
+
+  .quiz-opt.correct {
+    border-color: var(--green);
+    color: var(--green);
+    background: rgba(34,211,165,0.08);
+  }
+
+  .quiz-opt.wrong {
+    border-color: var(--red);
+    color: var(--red);
+    background: rgba(248,113,113,0.08);
+  }
+
+  .opt-key {
+    width: 22px; height: 22px;
+    border: 1px solid currentColor;
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    flex-shrink: 0;
+  }
+
+  .quiz-explain {
+    background: rgba(59,130,246,0.08);
+    border: 1px solid rgba(59,130,246,0.2);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: var(--accent3);
+    line-height: 1.6;
+    display: none;
+    margin-bottom: 1rem;
+  }
+
+  .quiz-explain.show { display: block; }
+
+  .quiz-btns {
+    display: flex;
+    gap: 10px;
+  }
+
+  /* ── LABS / SCENARIOS ── */
+  .labs-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .lab-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    cursor: pointer;
+    transition: border-color 0.2s;
+  }
+
+  .lab-item:hover { border-color: var(--accent); }
+
+  .lab-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text3);
+    width: 36px;
+    flex-shrink: 0;
+  }
+
+  .lab-info { flex: 1; }
+
+  .lab-title {
+    font-family: var(--display);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 3px;
+  }
+
+  .lab-meta {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text3);
+    display: flex;
+    gap: 12px;
+  }
+
+  .lab-diff {
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-family: var(--mono);
+    font-size: 11px;
+    flex-shrink: 0;
+  }
+
+  .diff-b { background: rgba(34,211,165,0.1); color: var(--green); border: 1px solid rgba(34,211,165,0.2); }
+  .diff-i { background: rgba(251,191,36,0.1); color: var(--yellow); border: 1px solid rgba(251,191,36,0.2); }
+  .diff-a { background: rgba(248,113,113,0.1); color: var(--red); border: 1px solid rgba(248,113,113,0.2); }
+
+  /* ── FOOTER ── */
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--border);
+    padding: 3rem 2rem;
+    text-align: center;
+  }
+
+  .footer-logo {
+    font-family: var(--display);
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+  }
+
+  .footer-sub {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text3);
+    margin-bottom: 1.5rem;
+  }
+
+  .footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+  }
+
+  .footer-links a {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text3);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover { color: var(--accent2); }
+
+  .footer-copy {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text3);
+  }
+
+  .footer-copy a { color: var(--accent2); text-decoration: none; }
+
+  /* ── DIVIDER ── */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+  @media (max-width: 640px) {
+    .nav-links { display: none; }
+    .stat { min-width: 120px; }
+    .cheatsheet-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-icon">K8</div>
+    <span class="nav-logo-text">Kube<span>Lab</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#modules">Modules</a></li>
+    <li><a href="#tools">Tools</a></li>
+    <li><a href="#cheatsheet">Cheatsheet</a></li>
+    <li><a href="#quiz">Quiz</a></li>
+    <li><a href="#labs">Labs</a></li>
+  </ul>
+  <a href="https://eknathalabs.com" class="nav-badge">↗ eknathalabs.com</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-glow"></div>
+
+  <div class="hero-tag">kubernetes.eknathalabs.com · Free · No signup</div>
+
+  <h1>
+    <span class="kube">Kube</span><span class="lab">Lab</span><br>
+    Master Kubernetes.<br>Ship with Confidence.
+  </h1>
+
+  <p class="hero-sub">
+    A structured, hands-on Kubernetes learning lab — concepts, interactive tools, cheatsheets, scenario-based quizzes, and CKA/CKS prep. Built by a Platform Engineer, for Platform Engineers.
+  </p>
+
+  <div class="hero-ctas">
+    <a href="#modules" class="btn-primary">▶ Start Learning</a>
+    <a href="#cheatsheet" class="btn-secondary">⌘ Cheatsheet</a>
+    <a href="#quiz" class="btn-secondary">✦ Take Quiz</a>
+  </div>
+
+  <div class="hero-terminal">
+    <div class="terminal-bar">
+      <div class="dot dot-r"></div>
+      <div class="dot dot-y"></div>
+      <div class="dot dot-g"></div>
+      <span class="terminal-title">kubelab ~ kubectl</span>
+    </div>
+    <div class="terminal-body">
+      <div><span class="t-prompt">eknatha@kubelab</span> <span class="t-cmd">$ kubectl get pods -n production</span></div>
+      <div><span class="t-out">NAME&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; READY&nbsp;&nbsp; STATUS&nbsp;&nbsp;&nbsp; RESTARTS&nbsp;&nbsp; AGE</span></div>
+      <div><span class="t-success">api-deployment-7d9f8b-xkv2p&nbsp;&nbsp; 1/1&nbsp;&nbsp;&nbsp;&nbsp; Running&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2d</span></div>
+      <div><span class="t-err">worker-5c8b9d-mnp4q&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0/1&nbsp;&nbsp;&nbsp;&nbsp; CrashLoopBackOff&nbsp; 14&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1h</span></div>
+      <div><span class="t-success">db-statefulset-0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1/1&nbsp;&nbsp;&nbsp;&nbsp; Running&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 5d</span></div>
+      <div>&nbsp;</div>
+      <div><span class="t-prompt">eknatha@kubelab</span> <span class="t-cmd">$ kubectl describe pod worker-5c8b9d-mnp4q</span></div>
+      <div><span class="t-comment"># → OOMKilled · Memory limit: 128Mi · Usage: 512Mi</span></div>
+      <div><span class="t-comment"># → Fix: increase resources.limits.memory or optimize app</span></div>
+      <div>&nbsp;</div>
+      <div><span class="t-prompt">eknatha@kubelab</span> <span class="cursor"></span></div>
+    </div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat"><div class="stat-num">12</div><div class="stat-label">Modules</div></div>
+  <div class="stat"><div class="stat-num">8</div><div class="stat-label">Tools</div></div>
+  <div class="stat"><div class="stat-num">200+</div><div class="stat-label">Commands</div></div>
+  <div class="stat"><div class="stat-num">50+</div><div class="stat-label">Quiz Questions</div></div>
+  <div class="stat"><div class="stat-num">CKA</div><div class="stat-label">Exam Ready</div></div>
+</div>
+
+<hr class="divider">
+
+<!-- MODULES -->
+<section id="modules">
+  <div class="section-header">
+    <div class="section-tag">Learning Path</div>
+    <h2 class="section-title">Structured Modules</h2>
+    <p class="section-desc">From cluster architecture to advanced security — follow the path or jump to what you need.</p>
+  </div>
+
+  <div class="modules-grid">
+
+    <div class="module-card">
+      <div class="module-num">MODULE 01</div>
+      <div class="module-icon">🏗️</div>
+      <div class="module-title">Cluster Architecture</div>
+      <div class="module-desc">Control plane components, worker nodes, etcd, API server, scheduler and controller manager internals.</div>
+      <div class="module-tags">
+        <span class="tag tag-blue">API Server</span>
+        <span class="tag tag-green">etcd</span>
+        <span class="tag tag-blue">Scheduler</span>
+      </div>
+    </div>
+
+    <div class="module-card">
+      <div class="module-num">MODULE 02</div>
+      <div class="module-icon">📦</div>
+      <div class="module-title">Pods & Workloads</div>
+      <div class="module-desc">Pods, Deployments, StatefulSets, DaemonSets, Jobs, CronJobs — lifecycle and practical usage.</div>
+      <div class="module-tags">
+        <span class="tag tag-green">Pods</span>
+        <span class="tag tag-blue">Deployments</span>
+        <span class="tag tag-purple">StatefulSets</span>
+      </div>
+    </div>
+
+    <div class="module-card">
+      <div class="module-num">MODULE 03</div>
+      <div class="module-icon">🌐</div>
+      <div class="module-title">Networking</div>
+      <div class="module-desc">Services, Ingress, Network Policies, DNS, CNI plugins, pod-to-pod communication model.</div>
+      <div class="module-tags">
+        <span class="tag tag-blue">Services</span>
+        <span class="tag tag-yellow">Ingress</span>
+        <span class="tag tag-red">NetworkPolicy</span>
+      </div>
+    </div>
+
+    <div class="module-card">
+      <div class="module-num">MODULE 04</div>
+      <div class="module-icon">💾</div>
+      <div class="module-title">Storage & Volumes</div>
+      <div class="module-desc">PersistentVolumes, PVCs, StorageClasses, volume types, dynamic provisioning patterns.</div>
+      <div class="module-tags">
+        <span class="tag tag-yellow">PV / PVC</span>
+        <span class="tag tag-blue">StorageClass</span>
+        <span class="tag tag-green">CSI</span>
+      </div>
+    </div>
+
+    <div class="module-card">
+      <div class="module-num">MODULE 05</div>
+      <div class="module-icon">🔐</div>
+      <div class="module-title">RBAC & Security</div>
+      <div class="module-desc">Roles, ClusterRoles, ServiceAccounts, Secrets, Pod Security Standards, OPA/Gatekeeper basics.</div>
+      <div class="module-tags">
+        <span class="tag tag-red">RBAC</span>
+        <span class="tag tag-purple">Secrets</span>
+        <span class="tag tag-yellow">PSS</span>
+      </div>
+    </div>
+
+    <div class="module-card">
+      <div class="module-num">MODULE 06</div>
+      <div class="module-icon">⚙️</div>
+      <div class="module-title">Config & Secrets</div>
+      <div class="module-desc">ConfigMaps, Secrets management, environment injection, external secrets operators.</div>
+      <div class="module-tags">
+        <span class="tag tag-blue">ConfigMap</span>
+        <span class="tag tag-red">Secrets</span>
+        <span class="tag tag-green">ESO</span>
+      </div>
+    </div>
+
+    <div class="module-card">
+      <div class="module-num">MODULE 07</div>
+      <div class="module-icon">📈</div>
+      <div class="module-title">Scaling & Scheduling</div>
+      <div class="module-desc">HPA, VPA, KEDA, node affinity, taints & tolerations, resource requests and limits.</div>
+      <div class="module-tags">
+        <span class="tag tag-green">HPA</span>
+        <span class="tag tag-blue">Affinity</span>
+        <span class="tag tag-yellow">KEDA</span>
+      </div>
+    </div>
+
+    <div class="module-card">
+      <div class="module-num">MODULE 08</div>
+      <div class="module-icon">🔭</div>
+      <div class="module-title">Observability</div>
+      <div class="module-desc">Metrics Server, Prometheus, Grafana, logging with Loki, distributed tracing fundamentals.</div>
+      <div class="module-tags">
+        <span class="tag tag-blue">Prometheus</span>
+        <span class="tag tag-yellow">Grafana</span>
+        <span class="tag tag-green">Loki</span>
+      </div>
+    </div>
+
+    <div class="module-card">
+      <div class="module-num">MODULE 09</div>
+      <div class="module-icon">🪖</div>
+      <div class="module-title">Helm & Package Mgmt</div>
+      <div class="module-desc">Helm charts, values.yaml, chart templating, releases, repositories, upgrading and rollbacks.</div>
+      <div class="module-tags">
+        <span class="tag tag-purple">Helm</span>
+        <span class="tag tag-blue">Charts</span>
+        <span class="tag tag-green">Releases</span>
+      </div>
+    </div>
+
+    <div class="module-card">
+      <div class="module-num">MODULE 10</div>
+      <div class="module-icon">🔄</div>
+      <div class="module-title">GitOps & ArgoCD</div>
+      <div class="module-desc">GitOps principles, ArgoCD setup, Application CRDs, sync policies, App of Apps pattern.</div>
+      <div class="module-tags">
+        <span class="tag tag-green">ArgoCD</span>
+        <span class="tag tag-blue">GitOps</span>
+        <span class="tag tag-yellow">Flux</span>
+      </div>
+    </div>
+
+    <div class="module-card">
+      <div class="module-num">MODULE 11</div>
+      <div class="module-icon">🛡️</div>
+      <div class="module-title">CKS Security Deep Dive</div>
+      <div class="module-desc">Image scanning, runtime security, Falco, supply chain security, admission controllers.</div>
+      <div class="module-tags">
+        <span class="tag tag-red">Falco</span>
+        <span class="tag tag-purple">OPA</span>
+        <span class="tag tag-yellow">Trivy</span>
+      </div>
+    </div>
+
+    <div class="module-card">
+      <div class="module-num">MODULE 12</div>
+      <div class="module-icon">☁️</div>
+      <div class="module-title">GKE & Cloud K8s</div>
+      <div class="module-desc">GKE Autopilot vs Standard, node pools, Workload Identity, Cloud Armor, Anthos basics.</div>
+      <div class="module-tags">
+        <span class="tag tag-blue">GKE</span>
+        <span class="tag tag-green">Autopilot</span>
+        <span class="tag tag-yellow">Anthos</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- TOOLS -->
+<section id="tools">
+  <div class="section-header">
+    <div class="section-tag">Interactive Tools</div>
+    <h2 class="section-title">Built-in K8s Tools</h2>
+    <p class="section-desc">Paste, generate, and understand — without leaving the page.</p>
+  </div>
+
+  <div class="tools-grid">
+    <div class="tool-card">
+      <div class="tool-icon tool-icon-blue">🔍</div>
+      <div class="tool-title">K8s Troubleshooter</div>
+      <div class="tool-desc">Paste pod logs or kubectl output → get root cause analysis and fix steps instantly.</div>
+      <a href="#" class="tool-link">Open tool →</a>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon tool-icon-green">📄</div>
+      <div class="tool-title">YAML Validator & Explainer</div>
+      <div class="tool-desc">Paste any K8s manifest → field-by-field explanation and common mistakes flagged.</div>
+      <a href="#" class="tool-link">Open tool →</a>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon tool-icon-purple">🔒</div>
+      <div class="tool-title">Network Policy Builder</div>
+      <div class="tool-desc">Define allow/deny rules visually → generate production-ready NetworkPolicy YAML.</div>
+      <a href="#" class="tool-link">Open tool →</a>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon tool-icon-yellow">📊</div>
+      <div class="tool-title">PromQL Query Builder</div>
+      <div class="tool-desc">Describe what you want to measure → get a PromQL expression with explanation.</div>
+      <a href="#" class="tool-link">Open tool →</a>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon tool-icon-blue">⛑️</div>
+      <div class="tool-title">RBAC Generator</div>
+      <div class="tool-desc">Define a service account's needs → generate Role + RoleBinding YAML.</div>
+      <a href="#" class="tool-link">Open tool →</a>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon tool-icon-green">🪖</div>
+      <div class="tool-title">Helm Values Generator</div>
+      <div class="tool-desc">Pick a chart + environment → get a sensible values.yaml with inline comments.</div>
+      <a href="#" class="tool-link">Open tool →</a>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon tool-icon-purple">📐</div>
+      <div class="tool-title">Resource Calculator</div>
+      <div class="tool-desc">App type + expected load → recommended CPU/memory requests and limits.</div>
+      <a href="#" class="tool-link">Open tool →</a>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon tool-icon-yellow">🐳</div>
+      <div class="tool-title">Dockerfile Linter</div>
+      <div class="tool-desc">Paste Dockerfile → security flags, layer optimization, and best practice suggestions.</div>
+      <a href="#" class="tool-link">Open tool →</a>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- CHEATSHEET -->
+<section id="cheatsheet">
+  <div class="section-header">
+    <div class="section-tag">Quick Reference</div>
+    <h2 class="section-title">kubectl Cheatsheet</h2>
+    <p class="section-desc">The commands you'll use every day — production-tested, CKA-ready.</p>
+  </div>
+
+  <div class="cheatsheet-grid">
+
+    <div class="cheat-card">
+      <div class="cheat-header"><div class="cheat-dot" style="background:var(--green)"></div><span class="cheat-title">Pods & Workloads</span></div>
+      <div class="cheat-body">
+        <div class="cheat-row"><span class="cheat-cmd">kubectl get pods -A</span><span class="cheat-explain">All pods, all namespaces</span></div>
+        <div class="cheat-row"><span class="cheat-cmd">kubectl describe pod &lt;name&gt;</span><span class="cheat-explain">Full pod details + events</span></div>
+        <div class="cheat-row"><span class="cheat-cmd">kubectl logs -f &lt;pod&gt; -c &lt;c&gt;</span><span class="cheat-explain">Stream container logs</span></div>
+        <div class="cheat-row"><span class="cheat-cmd">kubectl exec -it &lt;pod&gt; -- sh</span><span class="cheat-explain">Shell into container</span></div>
+        <div class="cheat-row"><span class="cheat-cmd">kubectl rollout restart deploy/&lt;n&gt;</span><span class="cheat-explain">Rolling restart</span></div>
+      </div>
+    </div>
+
+    <div class="cheat-card">
+      <div class="cheat-header"><div class="cheat-dot" style="background:var(--accent)"></div><span class="cheat-title">Debugging</span></div>
+      <div class="cheat-body">
+        <div class="cheat-row"><span class="cheat-cmd">kubectl get events --sort-by=.lastTimestamp</span><span class="cheat-explain">Recent cluster events</span></div>
+        <div class="cheat-row"><span class="cheat-cmd">kubectl top pods --containers</span><span class="cheat-explain">Per-container resource use</span></div>
+        <div class="cheat-row"><span class="cheat-cmd">kubectl debug -it &lt;pod&gt; --image=busybox</span><span class="cheat-explain">Debug sidecar</span></div>
+        <div class="cheat-row"><span class="cheat-cmd">kubectl get pod -o yaml | grep -i image</span><span class="cheat-explain">Check image in use</span></div>
+        <div class="cheat-row"><span class="cheat-cmd">kubectl auth can-i list pods --as=user</span><span class="cheat-explain">RBAC permission check</span></div>
+      </div>
+    </div>
+
+    <div class="cheat-card">
+      <div class="cheat-header"><div class="cheat-dot" style="background:var(--yellow)"></div><span class="cheat-title">Networking</span></div>
+      <div class="cheat-body">
+        <div class="cheat-row"><span class="cheat-cmd">kubectl get svc -A</span><span class="cheat-explain">All services</span></div>
+        <div class="cheat-row"><span class="cheat-cmd">kubectl port-forward svc/&lt;n&gt; 8080:80</span><span class="cheat-explain">Local port forward</span></div>
+        <div class="cheat-row"><span class="cheat-cmd">kubectl get ingress -A</span><span class="cheat-explain">All ingress rules</span></div>
+        <div class="cheat-row"><span class="cheat-cmd">kubectl get endpoints &lt;svc&gt;</span><span class="cheat-explain">Service endpoints</span></div>
+        <div class="cheat-row"><span class="cheat-cmd">kubectl get netpol -A</span><span class="cheat-explain">Network policies</span></div>
+      </div>
+    </div>
+
+    <div class="cheat-card">
+      <div class="cheat-header"><div class="cheat-dot" style="background:var(--red)"></div><span class="cheat-title">RBAC & Security</span></div>
+      <div class="cheat-body">
+        <div class="cheat-row"><span class="cheat-cmd">kubectl get roles,rolebindings -n &lt;ns&gt;</span><span class="cheat-explain">Namespace RBAC</span></div>
+        <div class="cheat-row"><span class="cheat-cmd">kubectl get clusterroles | grep -v system</span><span class="cheat-explain">Custom cluster roles</span></div>
+        <div class="cheat-row"><span class="cheat-cmd">kubectl create token &lt;sa&gt; -n &lt;ns&gt;</span><span class="cheat-explain">Generate SA token</span></div>
+        <div class="cheat-row"><span class="cheat-cmd">kubectl get secrets -n &lt;ns&gt;</span><span class="cheat-explain">List secrets</span></div>
+        <div class="cheat-row"><span class="cheat-cmd">kubectl certificate approve &lt;csr&gt;</span><span class="cheat-explain">Approve CSR</span></div>
+      </div>
+    </div>
+
+    <div class="cheat-card">
+      <div class="cheat-header"><div class="cheat-dot" style="background:var(--purple)"></div><span class="cheat-title">Storage</span></div>
+      <div class="cheat-body">
+        <div class="cheat-row"><span class="cheat-cmd">kubectl get pv,pvc -A</span><span class="cheat-explain">All volumes and claims</span></div>
+        <div class="cheat-row"><span class="cheat-cmd">kubectl get storageclass</span><span class="cheat-explain">Available storage classes</span></div>
+        <div class="cheat-row"><span class="cheat-cmd">kubectl describe pvc &lt;name&gt;</span><span class="cheat-explain">PVC binding status</span></div>
+        <div class="cheat-row"><span class="cheat-cmd">kubectl patch pv &lt;n&gt; -p '{"spec":{"persistentVolumeReclaimPolicy":"Retain"}}'</span><span class="cheat-explain">Change reclaim policy</span></div>
+      </div>
+    </div>
+
+    <div class="cheat-card">
+      <div class="cheat-header"><div class="cheat-dot" style="background:var(--green)"></div><span class="cheat-title">CKA Exam Tips</span></div>
+      <div class="cheat-body">
+        <div class="cheat-row"><span class="cheat-cmd">alias k=kubectl</span><span class="cheat-explain">Save keystrokes</span></div>
+        <div class="cheat-row"><span class="cheat-cmd">export do="--dry-run=client -o yaml"</span><span class="cheat-explain">Fast YAML generation</span></div>
+        <div class="cheat-row"><span class="cheat-cmd">k run pod1 --image=nginx $do &gt; p.yaml</span><span class="cheat-explain">Generate pod spec</span></div>
+        <div class="cheat-row"><span class="cheat-cmd">kubectl explain pod.spec.containers</span><span class="cheat-explain">Inline API docs</span></div>
+        <div class="cheat-row"><span class="cheat-cmd">kubectl config use-context &lt;ctx&gt;</span><span class="cheat-explain">Switch cluster context</span></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- QUIZ -->
+<section id="quiz">
+  <div class="section-header">
+    <div class="section-tag">Practice Questions</div>
+    <h2 class="section-title">CKA / CKS Quiz</h2>
+    <p class="section-desc">Scenario-based questions with detailed explanations. Covers real exam patterns.</p>
+  </div>
+
+  <div class="quiz-card">
+    <div class="quiz-label">✦ QUESTION 1 OF 50 · NETWORKING</div>
+    <div class="quiz-q" id="quiz-question">
+      A Pod in namespace <code style="color:var(--green);background:rgba(34,211,165,0.1);padding:2px 6px;border-radius:4px">payments</code> cannot reach a Pod in namespace <code style="color:var(--green);background:rgba(34,211,165,0.1);padding:2px 6px;border-radius:4px">orders</code>. Both pods are running. A NetworkPolicy exists in <code style="color:var(--green);background:rgba(34,211,165,0.1);padding:2px 6px;border-radius:4px">orders</code> namespace. What is the most likely cause?
+    </div>
+    <div class="quiz-options" id="quiz-options">
+      <div class="quiz-opt" onclick="checkAnswer(this, false)">
+        <span class="opt-key">A</span> The pods are on different nodes
+      </div>
+      <div class="quiz-opt" onclick="checkAnswer(this, false)">
+        <span class="opt-key">B</span> The CNI plugin is not installed
+      </div>
+      <div class="quiz-opt" onclick="checkAnswer(this, true)">
+        <span class="opt-key">C</span> The NetworkPolicy in orders namespace does not allow ingress from the payments namespace
+      </div>
+      <div class="quiz-opt" onclick="checkAnswer(this, false)">
+        <span class="opt-key">D</span> Cross-namespace communication is disabled by default in Kubernetes
+      </div>
+    </div>
+    <div class="quiz-explain" id="quiz-explain">
+      ✅ <strong>Correct.</strong> NetworkPolicy is namespace-scoped and deny-by-default once applied. If a NetworkPolicy exists in the <em>orders</em> namespace, it will block all ingress not explicitly allowed. The fix is to add an ingress rule allowing traffic from the <em>payments</em> namespace using <code>namespaceSelector</code> with appropriate labels. Cross-namespace communication is allowed by default in K8s without NetworkPolicy.
+    </div>
+    <div class="quiz-btns">
+      <button class="btn-primary" onclick="nextQuestion()" id="quiz-next" style="display:none">Next Question →</button>
+      <button class="btn-secondary" onclick="resetQuiz()">↺ Reset</button>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- LABS -->
+<section id="labs">
+  <div class="section-header">
+    <div class="section-tag">Hands-on Scenarios</div>
+    <h2 class="section-title">Practice Labs</h2>
+    <p class="section-desc">Real-world scenarios modelled on production incidents and CKA exam tasks.</p>
+  </div>
+
+  <div class="labs-list">
+
+    <div class="lab-item">
+      <div class="lab-num">LAB 01</div>
+      <div class="lab-info">
+        <div class="lab-title">Deploy a Multi-tier App with Services and Ingress</div>
+        <div class="lab-meta"><span>⏱ 30 min</span><span>Frontend · Backend · DB · Ingress</span></div>
+      </div>
+      <span class="lab-diff diff-b">Beginner</span>
+    </div>
+
+    <div class="lab-item">
+      <div class="lab-num">LAB 02</div>
+      <div class="lab-info">
+        <div class="lab-title">Debug a CrashLoopBackOff Pod — OOMKilled</div>
+        <div class="lab-meta"><span>⏱ 20 min</span><span>Debugging · Resource Limits · Logs</span></div>
+      </div>
+      <span class="lab-diff diff-b">Beginner</span>
+    </div>
+
+    <div class="lab-item">
+      <div class="lab-num">LAB 03</div>
+      <div class="lab-info">
+        <div class="lab-title">Configure RBAC for a CI/CD Service Account</div>
+        <div class="lab-meta"><span>⏱ 25 min</span><span>RBAC · ServiceAccount · Least Privilege</span></div>
+      </div>
+      <span class="lab-diff diff-i">Intermediate</span>
+    </div>
+
+    <div class="lab-item">
+      <div class="lab-num">LAB 04</div>
+      <div class="lab-info">
+        <div class="lab-title">Set Up HPA with Custom Metrics using KEDA</div>
+        <div class="lab-meta"><span>⏱ 45 min</span><span>HPA · KEDA · Prometheus · Scaling</span></div>
+      </div>
+      <span class="lab-diff diff-i">Intermediate</span>
+    </div>
+
+    <div class="lab-item">
+      <div class="lab-num">LAB 05</div>
+      <div class="lab-info">
+        <div class="lab-title">Implement Network Policies for Zero-Trust Namespace Isolation</div>
+        <div class="lab-meta"><span>⏱ 40 min</span><span>NetworkPolicy · Namespaces · Security</span></div>
+      </div>
+      <span class="lab-diff diff-i">Intermediate</span>
+    </div>
+
+    <div class="lab-item">
+      <div class="lab-num">LAB 06</div>
+      <div class="lab-info">
+        <div class="lab-title">Deploy ArgoCD and Set Up App of Apps GitOps Pattern</div>
+        <div class="lab-meta"><span>⏱ 60 min</span><span>ArgoCD · GitOps · Helm · App of Apps</span></div>
+      </div>
+      <span class="lab-diff diff-a">Advanced</span>
+    </div>
+
+    <div class="lab-item">
+      <div class="lab-num">LAB 07</div>
+      <div class="lab-info">
+        <div class="lab-title">Secure a Cluster with OPA Gatekeeper Admission Policies</div>
+        <div class="lab-meta"><span>⏱ 50 min</span><span>OPA · Gatekeeper · Admission · CKS</span></div>
+      </div>
+      <span class="lab-diff diff-a">Advanced</span>
+    </div>
+
+    <div class="lab-item">
+      <div class="lab-num">LAB 08</div>
+      <div class="lab-info">
+        <div class="lab-title">etcd Backup, Restore and Cluster Recovery</div>
+        <div class="lab-meta"><span>⏱ 35 min</span><span>etcd · Backup · Disaster Recovery · CKA</span></div>
+      </div>
+      <span class="lab-diff diff-a">Advanced</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo"><span style="color:var(--accent2)">Kube</span><span style="background:linear-gradient(135deg,var(--green),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Lab</span></div>
+  <div class="footer-sub">kubelab.eknathalabs.com · Built by Eknatha Reddy</div>
+  <div class="footer-links">
+    <a href="https://eknathalabs.com">eknathalabs.com</a>
+    <a href="https://github.com/eknathareddyp">GitHub</a>
+    <a href="#">linux.eknathalabs.com</a>
+    <a href="#">terraform.eknathalabs.com</a>
+    <a href="#">LinkedIn</a>
+  </div>
+  <div class="footer-copy">© 2025 <a href="https://eknathalabs.com">Eknatha Reddy</a> · Free forever · No ads · No signup</div>
+</footer>
+
+<script>
+  // Quiz logic
+  let answered = false;
+
+  function checkAnswer(el, correct) {
+    if (answered) return;
+    answered = true;
+
+    const opts = document.querySelectorAll('.quiz-opt');
+    opts.forEach(o => o.style.pointerEvents = 'none');
+
+    if (correct) {
+      el.classList.add('correct');
+    } else {
+      el.classList.add('wrong');
+      // highlight correct
+      opts.forEach(o => {
+        if (o.getAttribute('onclick').includes('true')) o.classList.add('correct');
+      });
+    }
+
+    document.getElementById('quiz-explain').classList.add('show');
+    document.getElementById('quiz-next').style.display = 'inline-flex';
+  }
+
+  function nextQuestion() {
+    // In real version, cycles through question bank
+    answered = false;
+    const opts = document.querySelectorAll('.quiz-opt');
+    opts.forEach(o => {
+      o.classList.remove('correct', 'wrong');
+      o.style.pointerEvents = '';
+    });
+    document.getElementById('quiz-explain').classList.remove('show');
+    document.getElementById('quiz-next').style.display = 'none';
+    alert('🎉 More questions coming soon! The full quiz bank will have 50+ CKA/CKS scenario questions.');
+  }
+
+  function resetQuiz() {
+    answered = false;
+    const opts = document.querySelectorAll('.quiz-opt');
+    opts.forEach(o => {
+      o.classList.remove('correct', 'wrong');
+      o.style.pointerEvents = '';
+    });
+    document.getElementById('quiz-explain').classList.remove('show');
+    document.getElementById('quiz-next').style.display = 'none';
+  }
+</script>
+</body>
+</html>
