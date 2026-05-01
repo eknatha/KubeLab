@@ -247,6 +247,54 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:2.
 .footer-copy{font-family:var(--mono);font-size:10px;color:var(--text3);}
 .footer-copy a{color:var(--accent2);text-decoration:none;}
 
+/* ── ENCYCLOPEDIA ── */
+.enc-search-wrap{position:relative;margin-bottom:1.5rem;}
+.enc-search{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 16px 12px 42px;font-family:var(--mono);font-size:13px;color:var(--text);outline:none;transition:border-color 0.2s;}
+.enc-search:focus{border-color:var(--accent2);}
+.enc-search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:14px;pointer-events:none;}
+.enc-filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1.5rem;}
+.enc-stats-bar{display:flex;gap:1.5rem;margin-bottom:2rem;padding:1rem 1.25rem;background:var(--surface);border:1px solid var(--border);border-radius:10px;flex-wrap:wrap;}
+.enc-stat{text-align:center;}
+.enc-stat-num{font-family:var(--display);font-size:1.4rem;font-weight:800;line-height:1;}
+.enc-stat-lbl{font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:0.06em;text-transform:uppercase;}
+.enc-grid{display:flex;flex-direction:column;gap:10px;}
+.enc-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:border-color 0.2s;}
+.enc-card:hover{border-color:var(--border2);}
+.enc-card.hidden{display:none;}
+.enc-header{padding:1rem 1.25rem;display:flex;align-items:center;gap:1rem;cursor:pointer;}
+.enc-sev{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.sev-critical{background:var(--red);}
+.sev-warning{background:var(--yellow);}
+.sev-info{background:var(--accent2);}
+.enc-title-wrap{flex:1;}
+.enc-error-name{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--text);}
+.enc-error-short{font-size:11px;color:var(--text3);margin-top:2px;}
+.enc-badges{display:flex;gap:6px;flex-wrap:wrap;flex-shrink:0;}
+.enc-badge{font-family:var(--mono);font-size:10px;padding:3px 8px;border-radius:4px;}
+.badge-critical{background:rgba(248,113,113,0.12);color:var(--red);border:1px solid rgba(248,113,113,0.25);}
+.badge-warning{background:rgba(251,191,36,0.1);color:var(--yellow);border:1px solid rgba(251,191,36,0.2);}
+.badge-info{background:rgba(59,130,246,0.12);color:var(--accent3);border:1px solid rgba(59,130,246,0.2);}
+.enc-toggle{color:var(--text3);font-size:11px;flex-shrink:0;transition:transform 0.2s;}
+.enc-toggle.open{transform:rotate(180deg);}
+.enc-body{display:none;border-top:1px solid var(--border);}
+.enc-body.show{display:block;}
+.enc-body-inner{padding:1.25rem;display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;}
+.enc-section h4{font-family:var(--mono);font-size:10px;color:var(--accent2);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.6rem;display:flex;align-items:center;gap:6px;}
+.enc-section h4::before{content:'';width:12px;height:1px;background:var(--accent);}
+.enc-section p,.enc-section li{font-size:0.85rem;color:var(--text2);line-height:1.65;}
+.enc-section ul{list-style:none;display:flex;flex-direction:column;gap:4px;}
+.enc-section ul li{padding-left:1rem;position:relative;}
+.enc-section ul li::before{content:'›';position:absolute;left:0;color:var(--accent2);}
+.enc-cmd-list{display:flex;flex-direction:column;gap:6px;}
+.enc-cmd{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:7px 10px;font-family:var(--mono);font-size:11px;color:var(--green);cursor:pointer;transition:border-color 0.2s;word-break:break-all;}
+.enc-cmd:hover{border-color:var(--accent2);}
+.enc-full-width{grid-column:1/-1;}
+.enc-exit-codes{display:flex;gap:8px;flex-wrap:wrap;margin-top:0.5rem;}
+.exit-code{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:6px 10px;font-family:var(--mono);font-size:11px;}
+.exit-code span{color:var(--yellow);}
+.enc-no-results{text-align:center;padding:4rem 2rem;font-family:var(--mono);font-size:13px;color:var(--text3);}
+@media(max-width:768px){.enc-body-inner{grid-template-columns:1fr;}.enc-badges{display:none;}}
+
 @media(max-width:768px){
   .nav-links{display:none;flex-direction:column;position:absolute;top:60px;left:0;right:0;background:var(--bg2);border-bottom:1px solid var(--border);padding:1rem 2rem;gap:1rem;}
   .nav-links.open{display:flex;}
@@ -272,6 +320,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:2.
     <li><a onclick="showPage('cheatsheet')" data-page="cheatsheet">Cheatsheet</a></li>
     <li><a onclick="showPage('quiz')" data-page="quiz">Quiz</a></li>
     <li><a onclick="showPage('labs')" data-page="labs">Labs</a></li>
+    <li><a onclick="showPage('errors')" data-page="errors">🔴 Errors</a></li>
   </ul>
   <div style="display:flex;align-items:center;gap:12px;">
     <a href="https://eknathalabs.com" class="nav-badge" target="_blank">↗ eknathalabs.com</a>
@@ -322,6 +371,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:2.
   <div class="stat"><div class="stat-num">100</div><div class="stat-label">Quiz Q&amp;A</div></div>
   <div class="stat"><div class="stat-num">12</div><div class="stat-label">Labs</div></div>
   <div class="stat"><div class="stat-num">CKA</div><div class="stat-label">Exam Ready</div></div>
+  <div class="stat"><div class="stat-num">60+</div><div class="stat-label">Error Codes</div></div>
 </div>
 
 <!-- Quick nav cards -->
@@ -351,6 +401,11 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:2.
       <div class="tool-icon ti-red">⚗</div>
       <div class="tool-title">12 Practice Labs</div>
       <div class="tool-desc">Full step-by-step lab walkthroughs from beginner to CKS-level advanced.</div>
+    </div>
+    <div class="tool-card" onclick="showPage('errors')">
+      <div class="tool-icon" style="background:rgba(248,113,113,0.12);">🔴</div>
+      <div class="tool-title">Error Encyclopedia</div>
+      <div class="tool-desc">60+ K8s error codes — cause, fix, and debug commands. Searchable.</div>
     </div>
   </div>
 </div>
@@ -489,7 +544,42 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:2.
 </div>
 </div>
 
-<script>
+
+<!-- ════════════════════════════════════════════
+     PAGE: ERROR ENCYCLOPEDIA
+════════════════════════════════════════════ -->
+<div class="page" id="page-errors">
+<div class="section-wrap">
+  <div class="section-header">
+    <div class="section-tag">Error Encyclopedia</div>
+    <h2 class="section-title">K8s Error Code Encyclopedia</h2>
+    <p class="section-desc">60+ Kubernetes errors — root cause, fix commands, and prevention. Searchable and filterable. Click any error to expand.</p>
+  </div>
+  <div class="enc-search-wrap">
+    <span class="enc-search-icon">🔍</span>
+    <input class="enc-search" id="encSearch" placeholder="Search errors, e.g. OOMKilled, ImagePullBackOff, Evicted..." oninput="filterEnc()">
+  </div>
+  <div class="enc-filters" id="encFilters">
+    <button class="filter-btn active" onclick="filterEncCat('all',this)">All</button>
+    <button class="filter-btn" onclick="filterEncCat('Pod',this)">Pod Status</button>
+    <button class="filter-btn" onclick="filterEncCat('Scheduling',this)">Scheduling</button>
+    <button class="filter-btn" onclick="filterEncCat('Networking',this)">Networking</button>
+    <button class="filter-btn" onclick="filterEncCat('Storage',this)">Storage</button>
+    <button class="filter-btn" onclick="filterEncCat('RBAC',this)">RBAC</button>
+    <button class="filter-btn" onclick="filterEncCat('Cluster',this)">Cluster</button>
+    <button class="filter-btn" onclick="filterEncCat('Helm',this)">Helm</button>
+  </div>
+  <div class="enc-stats-bar">
+    <div class="enc-stat"><div class="enc-stat-num" style="color:var(--red)" id="enc-critical-count">0</div><div class="enc-stat-lbl">Critical</div></div>
+    <div class="enc-stat"><div class="enc-stat-num" style="color:var(--yellow)" id="enc-warning-count">0</div><div class="enc-stat-lbl">Warning</div></div>
+    <div class="enc-stat"><div class="enc-stat-num" style="color:var(--accent2)" id="enc-info-count">0</div><div class="enc-stat-lbl">Info</div></div>
+    <div class="enc-stat"><div class="enc-stat-num" style="color:var(--text2)" id="enc-visible-count">0</div><div class="enc-stat-lbl">Showing</div></div>
+  </div>
+  <div class="enc-grid" id="encGrid"></div>
+  <div class="enc-no-results" id="encNoResults" style="display:none;">No errors match your search. Try a different term.</div>
+</div>
+</div>
+\n<script>
 // ════════════════════════════════════════════
 // NAV & PAGE SYSTEM
 // ════════════════════════════════════════════
@@ -1969,6 +2059,145 @@ renderTools();
 renderCheatsheet();
 renderLabs();
 startQuiz();
+
+// ════════════════════════════════════════════
+// ERROR ENCYCLOPEDIA DATA
+// ════════════════════════════════════════════
+const ENC_DATA = [
+{name:'CrashLoopBackOff',cat:'Pod',sev:'critical',short:'Container keeps crashing and Kubernetes keeps restarting it',cause:'Application exits with non-zero code. Common causes: missing env var or config, failed dependency (DB not ready), OOMKill, wrong entrypoint/command, application bug or exception on startup.',diagnose:['kubectl describe pod <name> - check Last State and Exit Code','kubectl logs <pod> --previous - logs from crashed container','Exit Code 1=app error, 137=OOMKilled, 139=segfault, 143=graceful kill'],fix:['kubectl logs <pod> --previous','kubectl describe pod <pod>','Check env vars and mounted secrets/configmaps','kubectl get events -n <ns> --sort-by=.lastTimestamp'],prevent:'Add readiness and liveness probes. Use init containers for dependency checks. Set resource limits. Test container locally before deploying.',exitCodes:[{code:'1',desc:'App error'},{code:'137',desc:'OOMKilled'},{code:'139',desc:'Segfault'},{code:'143',desc:'SIGTERM'}]},
+{name:'OOMKilled',cat:'Pod',sev:'critical',short:'Container killed by OS because it exceeded memory limit',cause:'Container used more memory than resources.limits.memory. Exit code is always 137.',diagnose:['kubectl describe pod <name> - check Last State','kubectl top pod <name> - current memory usage','Exit Code 137 = OOMKill confirmation'],fix:['Increase resources.limits.memory','kubectl set resources deployment <name> --limits=memory=512Mi','Profile the app for memory leaks','Add JVM heap flags for Java: -Xmx256m'],prevent:'Set memory requests equal to typical usage. Set limits 2x requests. Use VPA. Monitor with Prometheus memory alerts.',exitCodes:[{code:'137',desc:'Always OOMKilled'}]},
+{name:'ImagePullBackOff',cat:'Pod',sev:'critical',short:'Kubernetes cannot pull the container image from the registry',cause:'Image name or tag typo, image does not exist, private registry with no imagePullSecret, Docker Hub rate limiting, registry unreachable from node.',diagnose:['kubectl describe pod <name> - Events section shows exact error','kubectl get pod <name> -o jsonpath={.spec.containers[0].image}','Test manually: docker pull <image> from the node'],fix:['Fix image name/tag typo','kubectl create secret docker-registry regcred --docker-server=... --docker-username=... --docker-password=...','Add imagePullSecrets to pod spec','Use image digest instead of :latest'],prevent:'Use specific image tags, never :latest in production. Store credentials in imagePullSecrets. Use private registry mirrors.',exitCodes:[]},
+{name:'ErrImagePull',cat:'Pod',sev:'critical',short:'First failed attempt to pull the image before BackOff kicks in',cause:'Same causes as ImagePullBackOff - this is the initial error before Kubernetes begins exponential backoff retry cycle.',diagnose:['kubectl describe pod <name> - Events show pull error detail','kubectl get events -n <ns> | grep <pod-name>'],fix:['Same fixes as ImagePullBackOff','Verify registry reachable from node','Check image exists: crane digest <image>'],prevent:'Validate image references in CI before deploying.',exitCodes:[]},
+{name:'Pending',cat:'Pod',sev:'warning',short:'Pod created but not yet scheduled to any node',cause:'Insufficient CPU/memory on all nodes, no node matches nodeSelector/affinity, node has unmatched taints, PVC not bound, resource quota exceeded.',diagnose:['kubectl describe pod <name> - Events shows exact reason','kubectl get events -n <ns> | grep <pod>','kubectl describe nodes | grep -A5 Allocated'],fix:['kubectl describe pod <pod> | grep Events -A20','Add nodes or reduce resource requests','kubectl taint nodes <node> key=val:NoSchedule- (remove taint)','Check PVC: kubectl get pvc -n <ns>','kubectl describe resourcequota -n <ns>'],prevent:'Set sensible resource requests. Use PodDisruptionBudgets. Monitor node capacity. Use Cluster Autoscaler.',exitCodes:[]},
+{name:'Evicted',cat:'Pod',sev:'critical',short:'Pod forcibly removed from node due to resource pressure',cause:'Node under memory, disk, or PID pressure. Kubelet evicts pods by QoS order: BestEffort first, then Burstable, last Guaranteed.',diagnose:['kubectl get pod <name> -o yaml | grep -A5 status','kubectl describe pod <name> - Message shows reason','kubectl describe node <node> - check Conditions'],fix:['kubectl delete pod <evicted-pod>  # clean up evicted pods','kubectl describe node <node>','SSH to node: df -h, free -m','Increase resource limits or add nodes'],prevent:'Set resources.requests and limits on all pods. Monitor node disk and memory. Alert on node pressure.',exitCodes:[]},
+{name:'Terminating (stuck)',cat:'Pod',sev:'warning',short:'Pod stuck in Terminating state and not fully deleted',cause:'Finalizer not being removed, process ignoring SIGTERM, storage unmount hanging, network issue preventing graceful shutdown.',diagnose:['kubectl get pod <name> -o yaml | grep finalizers','kubectl describe pod <name> - check termination events'],fix:['kubectl delete pod <name> --force --grace-period=0','kubectl patch pod <name> -p {"metadata":{"finalizers":[]}} --type=merge','Fix broken finalizer controller'],prevent:'Implement graceful SIGTERM handling in apps. Set appropriate terminationGracePeriodSeconds.',exitCodes:[]},
+{name:'ContainerCreating',cat:'Pod',sev:'info',short:'Pod is scheduled but container has not started yet',cause:'Pulling image, mounting volumes, CNI initialising, ConfigMap/Secret not found, init container still running.',diagnose:['kubectl describe pod <name> - Events show blocking reason','kubectl get events -n <ns>','Stuck for more than 2min usually indicates a real problem'],fix:['kubectl describe pod <name>','kubectl get events | grep Pulling','kubectl get pvc -n <ns>','kubectl get secret <name> -n <ns>'],prevent:'Pre-pull images on nodes. Ensure all referenced ConfigMaps and Secrets exist before deploying.',exitCodes:[]},
+{name:'Init:CrashLoopBackOff',cat:'Pod',sev:'critical',short:'Init container is crashing before main containers can start',cause:'Init container command fails, missing dependency, wrong image, misconfigured command or args.',diagnose:['kubectl logs <pod> -c <init-container-name>','kubectl describe pod <pod> - shows which init container is failing'],fix:['kubectl logs <pod> -c <init-container-name> --previous','Fix init container command, image, or dependency','kubectl describe pod <pod> | grep -A10 "Init Containers"'],prevent:'Test init containers locally. Use simple reliable images. Add timeouts.',exitCodes:[]},
+{name:'RunContainerError',cat:'Pod',sev:'critical',short:'Container runtime failed to start the container',cause:'Container runtime error, security context violation (seccomp/AppArmor), missing device or capability.',diagnose:['kubectl describe pod <name> - Events section','journalctl -u containerd on the node'],fix:['kubectl describe pod <pod>','SSH to node: journalctl -u containerd -n 100','Check securityContext and AppArmor annotations'],prevent:'Validate securityContext settings. Test security profiles in development first.',exitCodes:[]},
+{name:'Liveness probe failed',cat:'Pod',sev:'warning',short:'Container liveness probe is failing - pod will be restarted',cause:'Application deadlock, probe endpoint not responding, wrong probe path or port, timeout too short.',diagnose:['kubectl describe pod <name> - Events show probe failure','kubectl exec <pod> -- curl localhost:<port><path>'],fix:['kubectl exec <pod> -- curl -v localhost:8080/health','Increase timeoutSeconds and failureThreshold','Fix application deadlock'],prevent:'Use meaningful health endpoints. Set appropriate timeout and threshold values. Test probes locally.',exitCodes:[]},
+{name:'Readiness probe failed',cat:'Pod',sev:'warning',short:'Container not ready - removed from service endpoints',cause:'Application not ready to serve traffic, dependency not available (DB not connected), readiness endpoint returning non-2xx.',diagnose:['kubectl describe pod <name> - Events','kubectl get endpoints <svc> - pod IP should be absent','kubectl exec <pod> -- curl localhost:<port>/ready'],fix:['kubectl get ep <svc>  # verify pod removed from endpoints','kubectl exec <pod> -- wget -qO- localhost:8080/ready','Adjust readiness probe initialDelaySeconds'],prevent:'Use initialDelaySeconds to give app time to start. Use startup probe for slow-starting apps.',exitCodes:[]},
+{name:'Back-off restarting failed container',cat:'Pod',sev:'warning',short:'Kubernetes is backing off restarting a container - exponential delay',cause:'Same as CrashLoopBackOff. Backoff: 10s, 20s, 40s... up to 5 minutes between restarts.',diagnose:['kubectl logs <pod> --previous','kubectl describe pod <pod> - restart count and last state'],fix:['kubectl logs <pod> -p','kubectl describe pod <pod>','Fix root cause: missing config, app bug, OOM'],prevent:'Thorough testing before production. Add resource limits. Use readiness probes.',exitCodes:[]},
+{name:'Pod has unbound PersistentVolumeClaims',cat:'Pod',sev:'warning',short:'Pod has a PVC not yet bound - pod stays in Pending',cause:'PVC is in Pending state. StorageClass does not exist, no PV matches, dynamic provisioner not working.',diagnose:['kubectl get pvc -n <ns>','kubectl describe pvc <name>','kubectl get storageclass'],fix:['kubectl describe pvc <name>  # find binding failure reason','kubectl get sc  # verify storageclass exists','Create matching PV manually if no dynamic provisioner'],prevent:'Test PVC provisioning in dev. Monitor PVC binding time.',exitCodes:[]},
+{name:'0/N nodes available: Insufficient cpu',cat:'Scheduling',sev:'critical',short:'No node has enough free CPU to schedule the pod',cause:'All nodes are at CPU capacity. Pod CPU requests exceed available capacity on every node.',diagnose:['kubectl describe pod <pod> - Events section','kubectl describe nodes | grep -A5 Allocated resources','kubectl top nodes'],fix:['Add more nodes to the cluster','Reduce pod CPU requests if over-provisioned','kubectl top pods --sort-by=cpu  # find CPU hogs','Enable Cluster Autoscaler on cloud clusters'],prevent:'Monitor node CPU. Set resource requests accurately. Use HPA to distribute load.',exitCodes:[]},
+{name:'0/N nodes available: Insufficient memory',cat:'Scheduling',sev:'critical',short:'No node has enough free memory for the pod',cause:'All nodes are at memory capacity. Pod memory requests exceed available memory.',diagnose:['kubectl describe pod <pod>','kubectl top nodes','kubectl describe nodes | grep -E "memory|Allocatable"'],fix:['Add memory to nodes or add more nodes','Reduce memory requests','kubectl top pods --sort-by=memory','Check for memory leaks in running pods'],prevent:'Right-size memory requests. Use VPA. Alert on node memory above 80%.',exitCodes:[]},
+{name:'node(s) had untolerated taint',cat:'Scheduling',sev:'warning',short:'Pod cannot be scheduled - nodes have taints the pod does not tolerate',cause:'Nodes have taints applied and pod spec does not have matching tolerations.',diagnose:['kubectl describe pod <pod> - shows the taint','kubectl describe nodes | grep Taint'],fix:['Add toleration to pod spec','kubectl taint nodes <node> <key>=<val>:NoSchedule- (remove taint)'],prevent:'Document node taints. Use node affinity with tolerations deliberately.',exitCodes:[]},
+{name:'node(s) did not match node affinity',cat:'Scheduling',sev:'warning',short:'No node has labels required by pod nodeAffinity or nodeSelector',cause:'Pod has nodeSelector or nodeAffinity rules that no node satisfies.',diagnose:['kubectl describe pod <pod>','kubectl get nodes --show-labels'],fix:['kubectl label nodes <node> <key>=<value>','Fix nodeSelector in pod spec','kubectl get nodes -l <key>=<value>  # verify label exists'],prevent:'Label nodes consistently. Validate nodeAffinity before deploying.',exitCodes:[]},
+{name:'FailedScheduling: PodTopologySpread',cat:'Scheduling',sev:'warning',short:'Pod cannot be placed without violating topology spread constraints',cause:'topologySpreadConstraints configured but placement would cause skew above maxSkew.',diagnose:['kubectl describe pod <pod> | grep -A5 Events','kubectl get pods -o wide  # check current distribution'],fix:['Increase maxSkew in topologySpreadConstraints','Set whenUnsatisfiable: ScheduleAnyway','Add more nodes in under-represented topology zone'],prevent:'Start with ScheduleAnyway. Use DoNotSchedule only for strict HA.',exitCodes:[]},
+{name:'Connection refused',cat:'Networking',sev:'critical',short:'Service or pod is not accepting connections on the target port',cause:'Application not listening on correct port, service port/targetPort mismatch, pod failing readiness and removed from endpoints.',diagnose:['kubectl get endpoints <svc> -n <ns>  # check if empty','kubectl describe svc <svc>','kubectl exec <pod> -- netstat -tlnp'],fix:['kubectl get ep <svc>  # empty = selector mismatch or no ready pods','kubectl describe pod <pod>  # readiness failures','Fix service targetPort to match container port'],prevent:'Always set readiness probes. Verify port alignment between Dockerfile, containerPort and service.',exitCodes:[]},
+{name:'Service has no endpoints',cat:'Networking',sev:'critical',short:'Service exists but has no pods backing it - all traffic drops',cause:'No running pods match the service selector, pods not passing readiness checks, pods in wrong namespace.',diagnose:['kubectl get endpoints <svc> -n <ns>','kubectl get pods -l <selector> -n <ns>','kubectl describe svc <svc> | grep Selector'],fix:['kubectl get pods -l app=myapp  # verify labels match selector','kubectl describe pod <pod>  # readiness failures','Fix label or selector mismatch'],prevent:'Validate selector matches pod labels. Monitor endpoint count with Prometheus.',exitCodes:[]},
+{name:'dial tcp: i/o timeout',cat:'Networking',sev:'critical',short:'Network connection timed out - target is unreachable',cause:'NetworkPolicy blocking traffic, wrong service URL, firewall blocking traffic, pod not ready.',diagnose:['kubectl get netpol -n <ns>','kubectl exec <pod> -- curl -v http://<svc>:<port>','kubectl exec <pod> -- nslookup <svc>.<ns>.svc.cluster.local'],fix:['kubectl get netpol -A','kubectl exec <pod> -- curl -v <url>','Add NetworkPolicy ingress rule if blocked'],prevent:'Test connectivity after deploying NetworkPolicies. Use graduated rollout of deny-all policies.',exitCodes:[]},
+{name:'DNS resolution failure',cat:'Networking',sev:'critical',short:'Pod cannot resolve service hostnames inside the cluster',cause:'CoreDNS pods not running, wrong dnsPolicy, network issue between pod and CoreDNS.',diagnose:['kubectl get pods -n kube-system -l k8s-app=kube-dns','kubectl exec <pod> -- nslookup kubernetes.default'],fix:['kubectl get pods -n kube-system | grep coredns','kubectl rollout restart deployment/coredns -n kube-system','kubectl exec <pod> -- cat /etc/resolv.conf'],prevent:'Monitor CoreDNS availability. Set resource limits on CoreDNS. Check upstream DNS failures.',exitCodes:[]},
+{name:'NetworkPolicy blocking traffic',cat:'Networking',sev:'warning',short:'Traffic dropped silently due to NetworkPolicy',cause:'A NetworkPolicy selects the pod, making all unspecified traffic denied by default.',diagnose:['kubectl get netpol -A','kubectl describe netpol <name> -n <ns>','kubectl exec <pod> -- curl -v --max-time 5 <url>'],fix:['kubectl get netpol -n <ns>','Add ingress/egress rule to allow required traffic','kubectl delete netpol <name>  # temp test without policy'],prevent:'Apply NetworkPolicies incrementally. Always test with curl from a test pod.',exitCodes:[]},
+{name:'Ingress 502 Bad Gateway',cat:'Networking',sev:'critical',short:'Ingress controller cannot reach the backend service',cause:'Backend pods not running, service port mismatch, pods failing health checks.',diagnose:['kubectl get pods -l app=<backend>','kubectl describe ingress <name>','kubectl get endpoints <backend>'],fix:['Check pods are Running and ready','kubectl describe svc <backend>  # verify targetPort','kubectl get ep <backend>  # must not be empty'],prevent:'Set readiness probes on backend pods. Monitor ingress error rates.',exitCodes:[]},
+{name:'Ingress 503 Service Unavailable',cat:'Networking',sev:'critical',short:'No healthy backend pods available for the Ingress route',cause:'All backend pods failing readiness, service has no endpoints, PDB blocking all pods.',diagnose:['kubectl get endpoints <svc>  # should have IPs','kubectl get pods -l <selector>'],fix:['kubectl get ep <svc>','Fix failing readiness probes','kubectl scale deployment <name> --replicas=3','kubectl get pdb  # check PodDisruptionBudget'],prevent:'Set minAvailable in PDB. Use multiple replicas.',exitCodes:[]},
+{name:'PVC stuck in Pending',cat:'Storage',sev:'warning',short:'PersistentVolumeClaim created but not bound to any volume',cause:'No PV satisfies the claim (wrong StorageClass, wrong access mode, insufficient size), dynamic provisioner not working.',diagnose:['kubectl describe pvc <name> -n <ns>  # check Events','kubectl get storageclass','kubectl get pv'],fix:['kubectl describe pvc <name>','kubectl get sc  # verify storageclass exists','Create matching PV manually if no dynamic provisioner'],prevent:'Test StorageClass provisioning in dev. Monitor PVC binding time. Alert on Pending PVCs.',exitCodes:[]},
+{name:'PVC stuck in Released',cat:'Storage',sev:'warning',short:'PV was released from deleted PVC but cannot be rebound',cause:'Reclaim policy is Retain. PV not automatically made available. ClaimRef still points to deleted PVC.',diagnose:['kubectl get pv  # shows Released status','kubectl describe pv <name>  # shows claimRef'],fix:['kubectl patch pv <name> -p {"spec":{"claimRef":null}}  # clear claimRef','PV status becomes Available','Create new PVC to bind to it'],prevent:'Use Delete reclaim policy for dynamic volumes. Use Retain only when data preservation is critical.',exitCodes:[]},
+{name:'MountVolume.SetUp failed',cat:'Storage',sev:'critical',short:'Volume cannot be mounted into the container',cause:'PVC not bound, volume already mounted on another node (RWO), node cannot reach storage backend.',diagnose:['kubectl describe pod <name>  # Events show mount error','kubectl get pvc -n <ns>','kubectl describe pvc <name>'],fix:['Check PVC is Bound: kubectl get pvc','For RWO volumes: only one node can mount at a time','Check node connectivity to storage backend'],prevent:'Use RWX storage class for multi-node access.',exitCodes:[]},
+{name:'Volume already exclusively attached',cat:'Storage',sev:'warning',short:'Block volume (RWO) still attached to old node when pod rescheduled',cause:'Pod moved to new node but block volume (EBS/GCE PD) still attached to old node. Common after node failure.',diagnose:['kubectl describe pod <name>  # "already exclusively attached"','kubectl get volumeattachment'],fix:['kubectl delete volumeattachment <name>  # force detach','Cordon old node and delete pod to force reschedule'],prevent:'Use StatefulSets with PVC templates. Consider CSI drivers with faster detach.',exitCodes:[]},
+{name:'Secret not found',cat:'Storage',sev:'warning',short:'Pod references a Secret that does not exist in the namespace',cause:'Secret was deleted, wrong namespace, name typo in pod spec, secret not yet created.',diagnose:['kubectl get secret -n <ns>','kubectl describe pod <name>  # shows which secret is missing'],fix:['kubectl get secrets -n <ns>','kubectl create secret generic <name> --from-literal=key=val','Fix secret name in pod spec or create the missing secret'],prevent:'Use init containers to wait for secrets. Use External Secrets Operator.',exitCodes:[]},
+{name:'Forbidden: User cannot get resource',cat:'RBAC',sev:'warning',short:'API request denied due to insufficient RBAC permissions',cause:'ServiceAccount or user does not have a Role/ClusterRole granting the requested verb on the requested resource.',diagnose:['kubectl auth can-i <verb> <resource> --as=system:serviceaccount:<ns>:<sa>','kubectl describe rolebinding -n <ns>'],fix:['kubectl auth can-i list pods --as=system:serviceaccount:ns:sa','kubectl create role reader --verb=get,list --resource=pods -n <ns>','kubectl create rolebinding <name> --role=reader --serviceaccount=<ns>:<sa>'],prevent:'Follow least-privilege. Audit permissions regularly. Use separate ServiceAccounts per workload.',exitCodes:[]},
+{name:'secrets is forbidden',cat:'RBAC',sev:'warning',short:'Pod or user trying to read Secrets without permission',cause:'ServiceAccount lacks get/list permission on secrets resource.',diagnose:['kubectl auth can-i get secrets -n <ns> --as=system:serviceaccount:<ns>:<sa>','kubectl logs <pod>  # often shows this error'],fix:['kubectl create role secret-reader --verb=get,list --resource=secrets -n <ns>','kubectl create rolebinding --role=secret-reader --serviceaccount=<ns>:<sa>'],prevent:'Grant minimal secret access. Prefer ExternalSecrets over direct secret access.',exitCodes:[]},
+{name:'Unauthorized: token expired',cat:'RBAC',sev:'warning',short:'Service account token has expired or is invalid',cause:'Bound service account tokens expire (default 1 hour). Using old static token after SA was recreated.',diagnose:['kubectl logs <pod>  # shows 401 Unauthorized','kubectl get serviceaccount <sa> -o yaml'],fix:['kubectl create token <sa> -n <ns>  # generate new token','Restart pod to get fresh projected token'],prevent:'Use projected service account tokens (auto-refreshed). Avoid long-lived static tokens.',exitCodes:[]},
+{name:'AlreadyExists',cat:'RBAC',sev:'info',short:'Resource you are trying to create already exists',cause:'Applying a manifest when the resource already exists and using kubectl create instead of apply.',diagnose:['kubectl get <resource> <name> -n <ns>'],fix:['kubectl apply -f manifest.yaml  # instead of kubectl create','kubectl replace -f manifest.yaml'],prevent:'Use kubectl apply consistently in CI/CD pipelines.',exitCodes:[]},
+{name:'etcd cluster is unavailable',cat:'Cluster',sev:'critical',short:'etcd quorum lost - cluster becomes read-only or unresponsive',cause:'Majority of etcd members are down. For 3-node etcd, losing 2 nodes = no quorum.',diagnose:['ETCDCTL_API=3 etcdctl endpoint health --endpoints=...','systemctl status etcd on control plane nodes'],fix:['Restore quorum by restarting etcd member','ETCDCTL_API=3 etcdctl snapshot restore <backup>','etcdctl member list  # check member status'],prevent:'Run 3 or 5 etcd members across failure zones. Take regular etcd snapshots. Monitor health continuously.',exitCodes:[]},
+{name:'Node NotReady',cat:'Cluster',sev:'critical',short:'Node stopped sending heartbeats to the API server',cause:'kubelet crashed, node out of disk/memory, network disconnection, container runtime failure.',diagnose:['kubectl describe node <name>  # check Conditions','SSH to node: systemctl status kubelet, journalctl -u kubelet'],fix:['SSH to node: systemctl restart kubelet','journalctl -u kubelet -n 100 --no-pager','df -h, free -m, systemctl status containerd'],prevent:'Monitor node conditions. Alert on NotReady nodes immediately. Use node problem detector.',exitCodes:[]},
+{name:'DiskPressure on node',cat:'Cluster',sev:'critical',short:'Node disk is nearly full - new pods will not be scheduled here',cause:'Container logs filling disk, large image layers accumulating, application writing too much data.',diagnose:['kubectl describe node <name> | grep DiskPressure','SSH to node: df -h','du -sh /var/lib/containerd','du -sh /var/log/containers'],fix:['crictl rmi --prune  # remove unused images','journalctl --vacuum-size=500M','find /var/log/pods -mtime +7 -delete','Add more disk or mount a larger volume'],prevent:'Configure log rotation. Set kubelet image-gc thresholds. Monitor disk usage.',exitCodes:[]},
+{name:'FailedCreatePodSandBox',cat:'Cluster',sev:'critical',short:'Container runtime cannot create the pod network namespace',cause:'CNI plugin error or misconfiguration, CNI binary missing, network plugin not ready, CIDR range exhausted.',diagnose:['kubectl describe pod <name>  # Events','journalctl -u kubelet -n 50 on node','ls /opt/cni/bin/  # check CNI binaries','kubectl get pods -n kube-system | grep -E "calico|flannel|cilium"'],fix:['kubectl rollout restart ds/<cni> -n kube-system','Check CNI pod logs','kubectl get nodes -o jsonpath="{.items[*].spec.podCIDR}"  # CIDR check'],prevent:'Monitor CNI pod health. Ensure CIDR ranges are sufficient.',exitCodes:[]},
+{name:'API server rate limiting (429)',cat:'Cluster',sev:'warning',short:'Too many API requests - API server is throttling clients',cause:'kubectl in a loop, controller making too many LIST/WATCH calls, CI/CD pipelines hammering the API.',diagnose:['kubectl get --raw /metrics | grep apiserver_request_total','kubectl logs -n kube-system kube-apiserver-* | grep 429'],fix:['Add --qps and --burst flags to controllers','Use watches instead of polling','Reduce kubectl invocations in scripts'],prevent:'Use informers/watches in operators. Batch API operations. Monitor request rates.',exitCodes:[]},
+{name:'Unable to connect to server',cat:'Cluster',sev:'critical',short:'kubectl cannot reach the Kubernetes API server',cause:'API server down, wrong kubeconfig context, VPN not connected, cluster credentials expired.',diagnose:['kubectl cluster-info','kubectl config current-context','curl -k https://<api-server>:6443/healthz'],fix:['kubectl config use-context <correct-context>','Reconnect VPN','aws eks update-kubeconfig ... (EKS)','gcloud container clusters get-credentials ... (GKE)'],prevent:'Monitor API server health. Alert on control plane unavailability. Use multi-master for HA.',exitCodes:[]},
+{name:'x509: certificate has expired',cat:'Cluster',sev:'critical',short:'TLS certificate used by a Kubernetes component has expired',cause:'Control plane certificates expire (default 1 year for kubeadm clusters).',diagnose:['kubeadm certs check-expiration','openssl x509 -in /etc/kubernetes/pki/apiserver.crt -noout -dates'],fix:['kubeadm certs renew all','systemctl restart kubelet','Rotate kubeconfig after renewal'],prevent:'Monitor certificate expiry. Set up automatic renewal. Alert 30 days before expiry.',exitCodes:[]},
+{name:'INSTALLATION FAILED: cannot re-use name',cat:'Helm',sev:'warning',short:'Helm release name already exists in the namespace',cause:'Running helm install when the release already exists.',diagnose:['helm list -n <ns>','helm status <release-name> -n <ns>'],fix:['helm upgrade <release> <chart> -n <ns>','helm upgrade --install <release> <chart>  # idempotent'],prevent:'Always use helm upgrade --install in CI/CD pipelines.',exitCodes:[]},
+{name:'UPGRADE FAILED: another operation in progress',cat:'Helm',sev:'warning',short:'Previous Helm operation is still running or was interrupted',cause:'Previous helm install/upgrade in progress or failed mid-way leaving release in bad state.',diagnose:['helm list -n <ns>  # check STATUS column','helm history <release> -n <ns>'],fix:['helm rollback <release> -n <ns>','helm uninstall <release> && helm install','kubectl delete secret -n <ns> sh.helm.release.v1.<release>.*'],prevent:'Use --wait flag with helm upgrade. Implement CI/CD locking to prevent concurrent deploys.',exitCodes:[]},
+{name:'rendered manifests contain existing resource',cat:'Helm',sev:'warning',short:'Helm trying to create a resource that was created outside Helm',cause:'Resource was created manually (kubectl apply) and is not tracked by Helm.',diagnose:['helm template <release> <chart> | kubectl apply --dry-run=server -f -'],fix:['kubectl annotate <resource> <name> meta.helm.sh/release-name=<release>','kubectl annotate <resource> <name> meta.helm.sh/release-namespace=<ns>','kubectl label <resource> <name> app.kubernetes.io/managed-by=Helm'],prevent:'Never create resources manually in namespaces managed by Helm.',exitCodes:[]},
+{name:'chart requires kubeVersion >= X.X.X',cat:'Helm',sev:'info',short:'Helm chart requires a newer Kubernetes version than your cluster',cause:'Chart maintainer set a minimum Kubernetes version in Chart.yaml kubeVersion field.',diagnose:['helm show chart <chart> | grep kubeVersion','kubectl version --short'],fix:['Upgrade Kubernetes cluster','Pin to an older chart version: helm search repo <chart> --versions'],prevent:'Check chart kubeVersion compatibility before planning upgrades.',exitCodes:[]},
+];
+
+function renderEnc() {
+  const grid = document.getElementById('encGrid');
+  let critical=0, warning=0, info=0;
+  ENC_DATA.forEach(e => {
+    if(e.sev==='critical') critical++;
+    else if(e.sev==='warning') warning++;
+    else info++;
+  });
+  document.getElementById('enc-critical-count').textContent = critical;
+  document.getElementById('enc-warning-count').textContent = warning;
+  document.getElementById('enc-info-count').textContent = info;
+  document.getElementById('enc-visible-count').textContent = ENC_DATA.length;
+
+  grid.innerHTML = ENC_DATA.map((e,i) => {
+    const sevCls = e.sev==='critical'?'sev-critical':e.sev==='warning'?'sev-warning':'sev-info';
+    const badgeCls = e.sev==='critical'?'badge-critical':e.sev==='warning'?'badge-warning':'badge-info';
+    const cmds = e.fix.map(f => `<div class="enc-cmd" onclick="copyEncCmd(this,'${f.replace(/'/g,"\\'").replace(/"/g,"&quot;")}')" title="Click to copy">${f}</div>`).join('');
+    const diagnoseList = e.diagnose.map(d=>`<li>${d}</li>`).join('');
+    const exitHtml = e.exitCodes && e.exitCodes.length ? `<div class="enc-section"><h4>Exit Codes</h4><div class="enc-exit-codes">${e.exitCodes.map(ec=>`<div class="exit-code"><span>${ec.code}</span> ${ec.desc}</div>`).join('')}</div></div>` : '';
+    return `<div class="enc-card" data-cat="${e.cat}" data-search="${(e.name+' '+e.short+' '+e.cause+' '+e.cat).toLowerCase()}" id="enc-${i}">
+      <div class="enc-header" onclick="toggleEnc(${i})">
+        <div class="enc-sev ${sevCls}"></div>
+        <div class="enc-title-wrap">
+          <div class="enc-error-name">${e.name}</div>
+          <div class="enc-error-short">${e.short}</div>
+        </div>
+        <div class="enc-badges">
+          <span class="enc-badge ${badgeCls}">${e.sev.toUpperCase()}</span>
+          <span class="enc-badge badge-info">${e.cat}</span>
+        </div>
+        <span class="enc-toggle" id="enctog-${i}">▼</span>
+      </div>
+      <div class="enc-body" id="encbody-${i}">
+        <div class="enc-body-inner">
+          <div class="enc-section"><h4>Root Cause</h4><p>${e.cause}</p></div>
+          <div class="enc-section"><h4>How to Diagnose</h4><ul>${diagnoseList}</ul></div>
+          <div class="enc-section enc-full-width"><h4>Debug Commands — click to copy</h4><div class="enc-cmd-list">${cmds}</div></div>
+          <div class="enc-section"><h4>Prevention</h4><p>${e.prevent}</p></div>
+          ${exitHtml}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleEnc(i) {
+  const body = document.getElementById('encbody-'+i);
+  const tog = document.getElementById('enctog-'+i);
+  const open = body.classList.contains('show');
+  body.classList.toggle('show', !open);
+  tog.classList.toggle('open', !open);
+  tog.textContent = open ? '▼' : '▲';
+}
+
+function copyEncCmd(el, cmd) {
+  navigator.clipboard.writeText(cmd).catch(()=>{});
+  const orig = el.style.borderColor;
+  el.style.borderColor = 'var(--green)';
+  el.style.color = 'var(--green)';
+  setTimeout(() => { el.style.borderColor=orig; el.style.color=''; }, 800);
+}
+
+let encActiveCat = 'all';
+function filterEncCat(cat, btn) {
+  document.querySelectorAll('.enc-filters .filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  encActiveCat = cat;
+  applyEncFilters();
+}
+function filterEnc() { applyEncFilters(); }
+function applyEncFilters() {
+  const q = (document.getElementById('encSearch').value||'').toLowerCase();
+  let visible = 0;
+  ENC_DATA.forEach((e,i) => {
+    const card = document.getElementById('enc-'+i);
+    const matchCat = encActiveCat==='all' || e.cat===encActiveCat;
+    const matchQ = !q || card.dataset.search.includes(q);
+    const show = matchCat && matchQ;
+    card.classList.toggle('hidden', !show);
+    if(show) visible++;
+  });
+  document.getElementById('enc-visible-count').textContent = visible;
+  document.getElementById('encNoResults').style.display = visible===0?'block':'none';
+}
+renderEnc();
+
 </script>
 </body>
 </html>
