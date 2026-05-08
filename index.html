@@ -366,7 +366,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:2.
 
 <div class="stats">
   <div class="stat"><div class="stat-num">12</div><div class="stat-label">Modules</div></div>
-  <div class="stat"><div class="stat-num">9</div><div class="stat-label">Tools</div></div>
+  <div class="stat"><div class="stat-num">9</div><div class="stat-label">Offline Tools</div></div>
   <div class="stat"><div class="stat-num">200+</div><div class="stat-label">Commands</div></div>
   <div class="stat"><div class="stat-num">100</div><div class="stat-label">Quiz Q&amp;A</div></div>
   <div class="stat"><div class="stat-num">12</div><div class="stat-label">Labs</div></div>
@@ -384,8 +384,8 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:2.
     </div>
     <div class="tool-card" onclick="showPage('tools')">
       <div class="tool-icon ti-green">🤖</div>
-      <div class="tool-title">9 Tools — incl. Offline YAML Generator</div>
-      <div class="tool-desc">Troubleshooter, YAML generator (offline), RBAC generator, PromQL builder and more.</div>
+      <div class="tool-title">9 Tools — All 100% Offline</div>
+      <div class="tool-desc">Troubleshooter, YAML generator, RBAC, PromQL, Helm values, resource calc, Dockerfile linter — all run in-browser, no API keys needed.</div>
     </div>
     <div class="tool-card" onclick="showPage('cheatsheet')">
       <div class="tool-icon ti-yellow">⌘</div>
@@ -411,14 +411,14 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:2.
 </div>
 <footer>
   <div class="footer-logo"><span style="color:var(--accent2)">Kube</span><span style="background:linear-gradient(135deg,var(--green),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Lab</span></div>
-  <div class="footer-sub">kubelab.eknathalabs.com · Built by Eknatha Reddy · Platform Engineer</div>
+  <div class="footer-sub">kubelab.eknathalabs.com · Built by Eknatha Reddy Puli · Platform Engineer</div>
   <div class="footer-links">
     <a href="https://eknathalabs.com" target="_blank">eknathalabs.com</a>
-    <a href="https://github.com/eknathareddyp" target="_blank">GitHub</a>
+    <a href="https://github.com/eknatha" target="_blank">GitHub</a>
     <a href="#">linux.eknathalabs.com</a>
     <a href="#">terraform.eknathalabs.com</a>
   </div>
-  <div class="footer-copy">© 2025 <a href="https://eknathalabs.com">Eknatha Reddy</a> · Free forever · No ads · No signup</div>
+  <div class="footer-copy">© 2026 <a href="https://eknathalabs.com">EknathaLabs</a> · Free forever · No ads · No signup</div>
 </footer>
 </div>
 
@@ -456,8 +456,8 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:2.
 <div class="section-wrap">
   <div class="section-header">
     <div class="section-tag">Interactive AI Tools</div>
-    <h2 class="section-title">Built-in K8s Tools <span class="ai-badge">✦ AI + Offline</span></h2>
-    <p class="section-desc">Paste, generate, and understand Kubernetes manifests, errors, and policies — including a fully offline YAML generator, no internet required.</p>
+    <h2 class="section-title">Built-in K8s Tools <span class="ai-badge" style="background:rgba(34,211,165,0.12);border-color:rgba(34,211,165,0.3);color:var(--green);">⚡ 100% Offline</span></h2>
+    <p class="section-desc">All 9 tools run entirely in your browser — no API keys, no internet required. Troubleshoot, generate YAML, build RBAC, PromQL, Helm values, and more.</p>
   </div>
   <div class="tools-grid" id="toolsGrid"></div>
   <div id="toolPanelContainer" style="margin-top:1.5rem;"></div>
@@ -1010,7 +1010,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/eknathareddyp/myapp
+    repoURL: https://github.com/eknatha/myapp
     targetRevision: main
     path: helm/myapp
   destination:
@@ -1181,18 +1181,21 @@ function copyText(text, el) {
 // TOOLS
 // ════════════════════════════════════════════
 const TOOLS = [
-  {id:'troubleshooter',icon:'🔍',cls:'ti-blue',title:'K8s Troubleshooter',desc:'Paste pod logs, events, or kubectl output → get root cause analysis and fix steps.',
-    ui:`<label style="font-family:var(--mono);font-size:11px;color:var(--text3);display:block;margin-bottom:6px;">Paste kubectl output, pod logs, or error message:</label>
+  {id:'troubleshooter',icon:'🔍',cls:'ti-blue',title:'K8s Troubleshooter',desc:'Paste pod logs, events, or kubectl output → get root cause analysis and fix steps. Fully offline.',
+    ui:`<div style="display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;color:var(--green);background:rgba(34,211,165,0.1);border:1px solid rgba(34,211,165,0.2);border-radius:4px;padding:3px 8px;margin-bottom:12px;">⚡ 100% Offline — no API call</div>
+        <label style="font-family:var(--mono);font-size:11px;color:var(--text3);display:block;margin-bottom:6px;">Paste kubectl output, pod logs, or error message:</label>
         <textarea class="tool-input" id="t-troubleshooter" placeholder="e.g. kubectl describe pod output, events, logs..." rows="6"></textarea>
-        <button class="btn-primary" onclick="runTool('troubleshooter')">🔍 Analyze <span class="ai-badge">AI</span></button>`
+        <button class="btn-green" onclick="runTool('troubleshooter')">🔍 Analyze — Offline</button>`
   },
-  {id:'yaml-explainer',icon:'📄',cls:'ti-green',title:'YAML Validator & Explainer',desc:'Paste any K8s manifest → field-by-field explanation and common mistakes flagged.',
-    ui:`<label style="font-family:var(--mono);font-size:11px;color:var(--text3);display:block;margin-bottom:6px;">Paste Kubernetes YAML manifest:</label>
+  {id:'yaml-explainer',icon:'📄',cls:'ti-green',title:'YAML Validator & Explainer',desc:'Paste any K8s manifest → field-by-field explanation and common mistakes flagged. Fully offline.',
+    ui:`<div style="display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;color:var(--green);background:rgba(34,211,165,0.1);border:1px solid rgba(34,211,165,0.2);border-radius:4px;padding:3px 8px;margin-bottom:12px;">⚡ 100% Offline — no API call</div>
+        <label style="font-family:var(--mono);font-size:11px;color:var(--text3);display:block;margin-bottom:6px;">Paste Kubernetes YAML manifest:</label>
         <textarea class="tool-input" id="t-yaml-explainer" placeholder="apiVersion: apps/v1\nkind: Deployment\n..." rows="8"></textarea>
-        <button class="btn-primary" onclick="runTool('yaml-explainer')">📄 Explain YAML <span class="ai-badge">AI</span></button>`
+        <button class="btn-green" onclick="runTool('yaml-explainer')">📄 Explain YAML — Offline</button>`
   },
-  {id:'netpol',icon:'🔒',cls:'ti-purple',title:'Network Policy Builder',desc:'Define ingress/egress rules → generate production-ready NetworkPolicy YAML.',
-    ui:`<div class="tool-row">
+  {id:'netpol',icon:'🔒',cls:'ti-purple',title:'Network Policy Builder',desc:'Define ingress/egress rules → generate production-ready NetworkPolicy YAML. Fully offline.',
+    ui:`<div style="display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;color:var(--green);background:rgba(34,211,165,0.1);border:1px solid rgba(34,211,165,0.2);border-radius:4px;padding:3px 8px;margin-bottom:12px;">⚡ 100% Offline — no API call</div>
+        <div class="tool-row">
           <div class="tool-field"><label>Source Namespace</label><input class="tool-input" id="netpol-src-ns" placeholder="frontend" style="min-height:40px;resize:none;"></div>
           <div class="tool-field"><label>Target Namespace</label><input class="tool-input" id="netpol-dst-ns" placeholder="backend" style="min-height:40px;resize:none;"></div>
         </div>
@@ -1207,39 +1210,103 @@ const TOOLS = [
           <option value="both">Ingress + Egress</option>
           <option value="denyall">Deny all traffic</option>
         </select><br>
-        <button class="btn-primary" onclick="runTool('netpol')">🔒 Generate NetworkPolicy <span class="ai-badge">AI</span></button>`
+        <button class="btn-green" onclick="runTool('netpol')">🔒 Generate NetworkPolicy — Offline</button>`
   },
-  {id:'rbac',icon:'⛑️',cls:'ti-red',title:'RBAC Generator',desc:'Describe what a service account needs → generate Role + RoleBinding YAML.',
-    ui:`<label style="font-family:var(--mono);font-size:11px;color:var(--text3);display:block;margin-bottom:6px;">Describe what the service account should be able to do:</label>
-        <textarea class="tool-input" id="t-rbac" placeholder="e.g. A CI/CD pipeline that needs to update deployments in the production namespace but cannot delete anything..." rows="4"></textarea>
+  {id:'rbac',icon:'⛑️',cls:'ti-red',title:'RBAC Generator',desc:'Describe what a service account needs → generate Role + RoleBinding YAML. Fully offline.',
+    ui:`<div style="display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;color:var(--green);background:rgba(34,211,165,0.1);border:1px solid rgba(34,211,165,0.2);border-radius:4px;padding:3px 8px;margin-bottom:12px;">⚡ 100% Offline — no API call</div>
         <div class="tool-row">
           <div class="tool-field"><label>ServiceAccount Name</label><input class="tool-input" id="rbac-sa" placeholder="ci-runner" style="min-height:40px;resize:none;"></div>
           <div class="tool-field"><label>Namespace</label><input class="tool-input" id="rbac-ns" placeholder="production" style="min-height:40px;resize:none;"></div>
         </div>
-        <button class="btn-primary" onclick="runTool('rbac')">⛑️ Generate RBAC <span class="ai-badge">AI</span></button>`
+        <label style="font-family:var(--mono);font-size:11px;color:var(--text3);display:block;margin-bottom:6px;">Resources to grant access to (check all that apply):</label>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:0.75rem;">
+          <label style="font-family:var(--mono);font-size:11px;color:var(--text3);display:flex;align-items:center;gap:5px;cursor:pointer;"><input type="checkbox" id="rbac-res-deployments" checked style="accent-color:var(--accent);"> deployments</label>
+          <label style="font-family:var(--mono);font-size:11px;color:var(--text3);display:flex;align-items:center;gap:5px;cursor:pointer;"><input type="checkbox" id="rbac-res-pods"> pods</label>
+          <label style="font-family:var(--mono);font-size:11px;color:var(--text3);display:flex;align-items:center;gap:5px;cursor:pointer;"><input type="checkbox" id="rbac-res-services"> services</label>
+          <label style="font-family:var(--mono);font-size:11px;color:var(--text3);display:flex;align-items:center;gap:5px;cursor:pointer;"><input type="checkbox" id="rbac-res-configmaps"> configmaps</label>
+          <label style="font-family:var(--mono);font-size:11px;color:var(--text3);display:flex;align-items:center;gap:5px;cursor:pointer;"><input type="checkbox" id="rbac-res-secrets"> secrets</label>
+          <label style="font-family:var(--mono);font-size:11px;color:var(--text3);display:flex;align-items:center;gap:5px;cursor:pointer;"><input type="checkbox" id="rbac-res-jobs"> jobs</label>
+          <label style="font-family:var(--mono);font-size:11px;color:var(--text3);display:flex;align-items:center;gap:5px;cursor:pointer;"><input type="checkbox" id="rbac-res-ingresses"> ingresses</label>
+          <label style="font-family:var(--mono);font-size:11px;color:var(--text3);display:flex;align-items:center;gap:5px;cursor:pointer;"><input type="checkbox" id="rbac-res-pvcs"> persistentvolumeclaims</label>
+        </div>
+        <label style="font-family:var(--mono);font-size:11px;color:var(--text3);display:block;margin-bottom:6px;">Verbs / Access level:</label>
+        <select class="tool-select" id="rbac-verbs" style="width:100%;margin-bottom:0.75rem;">
+          <option value="read">Read only (get, list, watch)</option>
+          <option value="readwrite" selected>Read + Write (get, list, watch, create, update, patch)</option>
+          <option value="full">Full access (all verbs)</option>
+          <option value="nodelete">Read + Write, no delete (get, list, watch, create, update, patch)</option>
+        </select>
+        <div class="tool-row">
+          <div class="tool-field"><label>Role scope</label>
+            <select class="tool-select" id="rbac-scope" style="width:100%;">
+              <option value="role">Role (namespace-scoped)</option>
+              <option value="clusterrole">ClusterRole (cluster-wide)</option>
+            </select>
+          </div>
+          <div class="tool-field"><label>Role Name</label><input class="tool-input" id="rbac-role-name" placeholder="my-role" style="min-height:40px;resize:none;"></div>
+        </div>
+        <button class="btn-green" onclick="runTool('rbac')">⛑️ Generate RBAC — Offline</button>`
   },
-  {id:'promql',icon:'📊',cls:'ti-yellow',title:'PromQL Query Builder',desc:'Describe what you want to measure → get a PromQL expression with explanation.',
-    ui:`<label style="font-family:var(--mono);font-size:11px;color:var(--text3);display:block;margin-bottom:6px;">Describe what you want to monitor:</label>
-        <textarea class="tool-input" id="t-promql" placeholder="e.g. Show me CPU usage percentage per pod in the production namespace, averaged over 5 minutes..." rows="4"></textarea>
-        <button class="btn-primary" onclick="runTool('promql')">📊 Build Query <span class="ai-badge">AI</span></button>`
+  {id:'promql',icon:'📊',cls:'ti-yellow',title:'PromQL Query Builder',desc:'Pick a metric type and target → get ready-to-use PromQL expressions with alert rules. Fully offline.',
+    ui:`<div style="display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;color:var(--green);background:rgba(34,211,165,0.1);border:1px solid rgba(34,211,165,0.2);border-radius:4px;padding:3px 8px;margin-bottom:12px;">⚡ 100% Offline — no API call</div>
+        <div class="tool-row">
+          <div class="tool-field"><label>Metric category</label>
+            <select class="tool-select" id="promql-cat" style="width:100%;">
+              <option value="cpu">CPU usage</option>
+              <option value="memory">Memory usage</option>
+              <option value="pods">Pod restarts / availability</option>
+              <option value="network">Network traffic</option>
+              <option value="storage">Storage / PVC</option>
+              <option value="latency">HTTP latency (ingress / nginx)</option>
+              <option value="errors">HTTP error rate</option>
+              <option value="nodes">Node health</option>
+            </select>
+          </div>
+          <div class="tool-field"><label>Namespace (blank = all)</label><input class="tool-input" id="promql-ns" placeholder="production" style="min-height:40px;resize:none;"></div>
+        </div>
+        <div class="tool-row">
+          <div class="tool-field"><label>Time window</label>
+            <select class="tool-select" id="promql-window" style="width:100%;">
+              <option value="1m">1 minute</option>
+              <option value="5m" selected>5 minutes</option>
+              <option value="15m">15 minutes</option>
+              <option value="1h">1 hour</option>
+            </select>
+          </div>
+          <div class="tool-field"><label>Alert threshold (optional)</label><input class="tool-input" id="promql-threshold" placeholder="e.g. 80 (for 80%)" style="min-height:40px;resize:none;"></div>
+        </div>
+        <button class="btn-green" onclick="runTool('promql')">📊 Build Queries — Offline</button>`
   },
-  {id:'helm-gen',icon:'🪖',cls:'ti-blue',title:'Helm Values Generator',desc:'Pick a chart + environment → get a sensible values.yaml with inline comments.',
-    ui:`<div class="tool-row">
-          <div class="tool-field"><label>Chart Name</label><input class="tool-input" id="helm-chart" placeholder="nginx, postgres, redis..." style="min-height:40px;resize:none;"></div>
+  {id:'helm-gen',icon:'🪖',cls:'ti-blue',title:'Helm Values Generator',desc:'Pick a chart + environment → get a sensible values.yaml with inline comments. Fully offline.',
+    ui:`<div style="display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;color:var(--green);background:rgba(34,211,165,0.1);border:1px solid rgba(34,211,165,0.2);border-radius:4px;padding:3px 8px;margin-bottom:12px;">⚡ 100% Offline — no API call</div>
+        <div class="tool-row">
+          <div class="tool-field"><label>Chart</label>
+            <select class="tool-select" id="helm-chart" style="width:100%;">
+              <option value="nginx">nginx / ingress-nginx</option>
+              <option value="postgres">postgresql</option>
+              <option value="redis">redis</option>
+              <option value="kafka">kafka</option>
+              <option value="prometheus">kube-prometheus-stack</option>
+              <option value="cert-manager">cert-manager</option>
+              <option value="argo-cd">argo-cd</option>
+              <option value="generic">generic app</option>
+            </select>
+          </div>
           <div class="tool-field"><label>Environment</label>
             <select class="tool-select" id="helm-env" style="width:100%;">
-              <option>development</option><option>staging</option><option>production</option>
+              <option>development</option><option>staging</option><option selected>production</option>
             </select>
           </div>
         </div>
         <div class="tool-row">
           <div class="tool-field"><label>Replicas</label><input class="tool-input" id="helm-replicas" placeholder="3" style="min-height:40px;resize:none;"></div>
-          <div class="tool-field"><label>Extra requirements (optional)</label><input class="tool-input" id="helm-extra" placeholder="e.g. persistence enabled, TLS..." style="min-height:40px;resize:none;"></div>
+          <div class="tool-field"><label>Extra notes (optional)</label><input class="tool-input" id="helm-extra" placeholder="e.g. persistence enabled, TLS..." style="min-height:40px;resize:none;"></div>
         </div>
-        <button class="btn-primary" onclick="runTool('helm-gen')">🪖 Generate values.yaml <span class="ai-badge">AI</span></button>`
+        <button class="btn-green" onclick="runTool('helm-gen')">🪖 Generate values.yaml — Offline</button>`
   },
-  {id:'resource-calc',icon:'📐',cls:'ti-green',title:'Resource Calculator',desc:'App type + expected load → recommended CPU/memory requests and limits.',
-    ui:`<div class="tool-row">
+  {id:'resource-calc',icon:'📐',cls:'ti-green',title:'Resource Calculator',desc:'App type + expected load → recommended CPU/memory requests and limits YAML. Fully offline.',
+    ui:`<div style="display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;color:var(--green);background:rgba(34,211,165,0.1);border:1px solid rgba(34,211,165,0.2);border-radius:4px;padding:3px 8px;margin-bottom:12px;">⚡ 100% Offline — no API call</div>
+        <div class="tool-row">
           <div class="tool-field"><label>Application type</label>
             <select class="tool-select" id="res-type" style="width:100%;">
               <option>Node.js API</option><option>Python/Django</option><option>Java Spring Boot</option>
@@ -1257,12 +1324,13 @@ const TOOLS = [
             </select>
           </div>
         </div>
-        <button class="btn-primary" onclick="runTool('resource-calc')">📐 Calculate Resources <span class="ai-badge">AI</span></button>`
+        <button class="btn-green" onclick="runTool('resource-calc')">📐 Calculate Resources — Offline</button>`
   },
-  {id:'dockerfile-lint',icon:'🐳',cls:'ti-purple',title:'Dockerfile Linter',desc:'Paste Dockerfile → security flags, layer optimization, and best practice suggestions.',
-    ui:`<label style="font-family:var(--mono);font-size:11px;color:var(--text3);display:block;margin-bottom:6px;">Paste your Dockerfile:</label>
+  {id:'dockerfile-lint',icon:'🐳',cls:'ti-purple',title:'Dockerfile Linter',desc:'Paste Dockerfile → security issues, layer optimization, and a fixed version. Fully offline.',
+    ui:`<div style="display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;color:var(--green);background:rgba(34,211,165,0.1);border:1px solid rgba(34,211,165,0.2);border-radius:4px;padding:3px 8px;margin-bottom:12px;">⚡ 100% Offline — no API call</div>
+        <label style="font-family:var(--mono);font-size:11px;color:var(--text3);display:block;margin-bottom:6px;">Paste your Dockerfile:</label>
         <textarea class="tool-input" id="t-dockerfile-lint" placeholder="FROM ubuntu:latest\nRUN apt-get update\n..." rows="8"></textarea>
-        <button class="btn-primary" onclick="runTool('dockerfile-lint')">🐳 Lint Dockerfile <span class="ai-badge">AI</span></button>`
+        <button class="btn-green" onclick="runTool('dockerfile-lint')">🐳 Lint Dockerfile — Offline</button>`
   },
   {id:'yaml-gen',icon:'⚡',cls:'ti-green',title:'YAML File Generator',desc:'Select resource kind, fill in fields → get a complete, production-ready Kubernetes YAML manifest. Fully offline — no API needed.',
     ui:`<div style="display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;color:var(--green);background:rgba(34,211,165,0.1);border:1px solid rgba(34,211,165,0.2);border-radius:4px;padding:3px 8px;margin-bottom:12px;">⚡ 100% Offline — no API call</div>
@@ -1841,10 +1909,9 @@ function openTool(id) {
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
             <div style="font-family:var(--mono);font-size:11px;color:var(--text3);">Output:</div>
             ${id==='yaml-gen'?`<div style="display:flex;gap:8px;">
-              <button onclick="copyYamlOutput()" style="font-family:var(--mono);font-size:10px;color:var(--green);background:rgba(34,211,165,0.1);border:1px solid rgba(34,211,165,0.2);border-radius:4px;padding:4px 10px;cursor:pointer;">📋 Copy YAML</button>
+              <button onclick="copyToolOutput('yaml-gen')" style="font-family:var(--mono);font-size:10px;color:var(--green);background:rgba(34,211,165,0.1);border:1px solid rgba(34,211,165,0.2);border-radius:4px;padding:4px 10px;cursor:pointer;">📋 Copy</button>
               <button onclick="downloadYamlOutput('${id}')" style="font-family:var(--mono);font-size:10px;color:var(--accent2);background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2);border-radius:4px;padding:4px 10px;cursor:pointer;">⬇ Download .yaml</button>
-            </div>`:''}
-          </div>
+            </div>`:`<button onclick="copyToolOutput('${id}')" style="font-family:var(--mono);font-size:10px;color:var(--green);background:rgba(34,211,165,0.1);border:1px solid rgba(34,211,165,0.2);border-radius:4px;padding:4px 10px;cursor:pointer;">📋 Copy</button>`}
           <div class="tool-output" id="output-${id}">Ready. Fill in the fields above and click the button.</div>
         </div>
       </div>
@@ -1855,8 +1922,8 @@ function openTool(id) {
   if(id==='yaml-gen') setTimeout(yamlGenKindChange, 0);
 }
 
-function copyYamlOutput() {
-  const txt = document.getElementById('output-yaml-gen')?.textContent || '';
+function copyToolOutput(id) {
+  const txt = document.getElementById('output-'+id)?.textContent || '';
   navigator.clipboard.writeText(txt).catch(()=>{});
   const btn = event.target;
   const orig = btn.textContent;
@@ -1878,130 +1945,993 @@ function downloadYamlOutput() {
   URL.revokeObjectURL(a.href);
 }
 
-async function runTool(id) {
+function runTool(id) {
   const outEl = document.getElementById('output-'+id);
-  outEl.textContent = 'Analyzing';
-  outEl.classList.add('loading-dots');
-  outEl.style.color = 'var(--text2)';
+  outEl.style.color = 'var(--green)';
 
-  let prompt = '';
+  // ── TROUBLESHOOTER ──────────────────────────────────────────────────────────
   if(id==='troubleshooter') {
-    const input = document.getElementById('t-troubleshooter').value.trim();
-    if(!input){outEl.textContent='Please paste your kubectl output or logs first.';outEl.classList.remove('loading-dots');return;}
-    prompt=`You are a Kubernetes expert. Analyze this kubectl output, error log, or pod description and provide:
-1. ROOT CAUSE: What is causing the issue (be specific)
-2. DIAGNOSIS: Key indicators in the output that reveal the problem
-3. FIX: Exact kubectl commands or YAML changes to resolve it
-4. PREVENTION: How to prevent this in future
+    const input = document.getElementById('t-troubleshooter').value.trim().toLowerCase();
+    if(!input){outEl.style.color='var(--red)';outEl.textContent='Please paste your kubectl output or logs first.';return;}
 
-Output: ${input}
+    const patterns = [
+      { match: /oomkill|memory.*limit|exit code.*137|killed/i,
+        cause:'OOMKilled — container exceeded its memory limit and was killed by the kernel.',
+        diag:'Look for "OOMKilled" in pod status and "Limits" in describe output. Check `kubectl top pod`.',
+        fix:['Increase resources.limits.memory in the pod spec','Add/tune a VPA to auto-size memory','Profile app for memory leaks — check heap dumps','kubectl set resources deploy/<name> --limits=memory=512Mi'],
+        prevent:'Set memory requests ≈ 70% of limit. Monitor with kube-state-metrics alert on container_oom_events_total.'
+      },
+      { match: /crashloopbackoff|back-off restarting|restartcount/i,
+        cause:'CrashLoopBackOff — the container keeps crashing and Kubernetes is backing off restarts.',
+        diag:'Run `kubectl logs <pod> --previous` to see the crash output. Check exit code with `kubectl describe pod`.',
+        fix:['kubectl logs <pod> --previous  # check crash reason','kubectl describe pod <pod>  # check Events section','Fix application error (bad config, missing env var, file not found)','kubectl exec -it <pod> -- sh  # if container starts briefly'],
+        prevent:'Add startupProbe with generous initialDelaySeconds. Validate config via init containers.'
+      },
+      { match: /imagepullbackoff|errimagepull|image.*not found|manifest.*unknown/i,
+        cause:'ImagePullBackOff — Kubernetes cannot pull the container image.',
+        diag:'Check image name and tag with `kubectl describe pod`. Verify registry credentials.',
+        fix:['kubectl describe pod <pod>  # check Events for exact error','Verify image tag exists: docker pull <image>','kubectl create secret docker-registry regcred --docker-server=... --docker-username=... --docker-password=...','Add imagePullSecrets to pod spec'],
+        prevent:'Use image digest pinning. Set up registry mirrors. Use imagePullPolicy: IfNotPresent in non-prod.'
+      },
+      { match: /pending|unschedulable|insufficient|no nodes|taint.*toleration|node.*selector/i,
+        cause:'Pod stuck in Pending — scheduler cannot find a suitable node.',
+        diag:'`kubectl describe pod <pod>` → Events section shows exact scheduler reason.',
+        fix:['kubectl describe pod <pod>  # read the Events block','kubectl get nodes -o wide  # check node status and taints','kubectl describe nodes  # check Allocatable vs Requests','Add tolerations if node is tainted','Relax nodeSelector / affinity rules','Scale up node pool if resources are exhausted'],
+        prevent:'Set resource requests accurately. Use PodDisruptionBudgets. Configure cluster autoscaler.'
+      },
+      { match: /evict|evicted|diskpressure|memorypressure|pidpressure/i,
+        cause:'Pod was Evicted — the node was under resource pressure (disk, memory, or PID).',
+        diag:'`kubectl describe node <node>` → check Conditions for MemoryPressure/DiskPressure.',
+        fix:['kubectl get events -n <ns> --sort-by=.lastTimestamp','kubectl describe node <node>  # check Conditions','Clean node disk: docker system prune / crictl rmi','Increase node size or add nodes','Set PodDisruptionBudget to prevent all pods evicting at once'],
+        prevent:'Set resource requests on all pods. Configure kubelet eviction thresholds. Alert on node pressure.'
+      },
+      { match: /readiness|liveness|probe.*fail|unhealthy|not ready/i,
+        cause:'Health probe failing — liveness or readiness probe is not getting a successful response.',
+        diag:'`kubectl describe pod` → Events will show "Liveness probe failed" with exit code or HTTP status.',
+        fix:['kubectl describe pod <pod>  # check probe failure details','kubectl exec -it <pod> -- curl http://localhost:<port>/healthz','Increase initialDelaySeconds if app is slow to start','Fix the health endpoint to return 200','kubectl logs <pod>  # look for app startup errors'],
+        prevent:'Use startupProbe for slow-starting apps. Tune failureThreshold and periodSeconds appropriately.'
+      },
+      { match: /forbidden|rbac|cannot list|cannot get|unauthorized|403/i,
+        cause:'RBAC permission denied — the ServiceAccount lacks the required Role/ClusterRole binding.',
+        diag:'`kubectl auth can-i <verb> <resource> --as=system:serviceaccount:<ns>:<sa>`',
+        fix:['kubectl auth can-i list pods --as=system:serviceaccount:<ns>:<sa>','kubectl create role <name> --verb=get,list,watch --resource=<resource> -n <ns>','kubectl create rolebinding <name> --role=<role> --serviceaccount=<ns>:<sa> -n <ns>','Check existing bindings: kubectl get rolebindings,clusterrolebindings -A | grep <sa>'],
+        prevent:'Follow least-privilege. Use kubectl auth can-i in CI to validate permissions before deploy.'
+      },
+      { match: /connection refused|dial tcp|no route|network|coredns|dns/i,
+        cause:'Network connectivity issue — pod cannot reach a service, DNS is failing, or a port is wrong.',
+        diag:'Check service endpoints and CoreDNS pods.',
+        fix:['kubectl get endpoints <svc> -n <ns>  # should have pod IPs','kubectl run tmp --image=busybox --rm -it -- nslookup <svc>.<ns>','kubectl get pods -n kube-system | grep coredns','kubectl logs -n kube-system -l k8s-app=kube-dns','Verify service selector matches pod labels: kubectl get svc <svc> -o yaml'],
+        prevent:'Use readiness probes so traffic is never sent to unready pods. Monitor CoreDNS latency.'
+      },
+      { match: /pvc|persistentvolumeclaim|bound|provisioning|storageclass|volume/i,
+        cause:'Storage issue — PVC is not binding to a PersistentVolume or provisioning is failing.',
+        diag:'`kubectl describe pvc <name>` → Events show provisioner error or no matching PV.',
+        fix:['kubectl describe pvc <name> -n <ns>','kubectl get storageclass  # verify storageclass name','kubectl get pv  # look for Available PVs','Check provisioner pod logs: kubectl logs -n <provisioner-ns> -l <provisioner-label>','Ensure access mode matches (RWO/RWX)'],
+        prevent:'Pre-create PVs or use dynamic provisioning with a CSI driver. Monitor PVC binding in dashboards.'
+      },
+      { match: /configmap|secret.*not found|env.*missing|no such file|key.*missing/i,
+        cause:'Missing ConfigMap or Secret — the pod references a config resource that does not exist.',
+        diag:'`kubectl describe pod` → "Error: configmap <name> not found" in Events.',
+        fix:['kubectl get configmap,secret -n <ns>  # verify they exist','kubectl describe pod <pod>  # read Events block','kubectl create configmap <name> --from-literal=key=value -n <ns>','kubectl create secret generic <name> --from-literal=key=value -n <ns>'],
+        prevent:'Use Helm or Kustomize to manage configs alongside workloads. Add CI checks for required secrets.'
+      },
+    ];
 
-Respond in plain text with clear sections. No markdown headers, use ALL CAPS for section labels.`;
+    let match = patterns.find(p => p.match.test(input));
+    if(!match) {
+      match = {
+        cause:'No specific pattern matched. General Kubernetes troubleshooting steps follow.',
+        diag:'Use kubectl describe and logs to gather more information.',
+        fix:['kubectl describe pod <pod> -n <ns>  # check Events section','kubectl logs <pod> -n <ns> --previous  # crash logs','kubectl get events --sort-by=.lastTimestamp -n <ns>','kubectl top pods -n <ns>  # resource usage'],
+        prevent:'Add structured logging, resource requests/limits, and health probes to all workloads.'
+      };
+    }
+
+    const fixLines = match.fix.map(f => `  → ${f}`).join('\n');
+    outEl.textContent =
+`ROOT CAUSE
+${match.cause}
+
+DIAGNOSIS
+${match.diag}
+
+FIX — commands to run:
+${fixLines}
+
+PREVENTION
+${match.prevent}
+
+─────────────────────────────────────────────
+Generated offline by KubeLab — kubelab.eknathalabs.com`;
+
+  // ── YAML EXPLAINER ──────────────────────────────────────────────────────────
   } else if(id==='yaml-explainer') {
     const input = document.getElementById('t-yaml-explainer').value.trim();
-    if(!input){outEl.textContent='Please paste a Kubernetes YAML manifest first.';outEl.classList.remove('loading-dots');return;}
-    prompt=`You are a Kubernetes expert. Analyze this Kubernetes YAML manifest and provide:
-1. SUMMARY: What this resource does in 1-2 sentences
-2. FIELD-BY-FIELD: Explain each important field and what it does
-3. ISSUES: Any misconfigurations, missing best practices, or security concerns
-4. IMPROVEMENTS: Specific suggestions to make this production-grade
+    if(!input){outEl.style.color='var(--red)';outEl.textContent='Please paste a Kubernetes YAML manifest first.';return;}
 
-YAML:
-${input}
+    const lines = input.split('\n');
+    const issues = [], improvements = [];
+    let kind='', name='', ns='', apiVersion='', summary='';
 
-Respond in plain text with clear sections.`;
+    lines.forEach(l => {
+      const t = l.trim();
+      if(t.startsWith('kind:')) kind = t.replace('kind:','').trim();
+      if(t.startsWith('name:') && !name) name = t.replace('name:','').trim();
+      if(t.startsWith('namespace:') && !ns) ns = t.replace('namespace:','').trim();
+      if(t.startsWith('apiVersion:')) apiVersion = t.replace('apiVersion:','').trim();
+    });
+
+    const kindSummaries = {
+      Deployment: 'manages a set of replica pods with rolling update strategy',
+      StatefulSet: 'manages stateful pods with stable identity and ordered deployment',
+      DaemonSet: 'ensures a pod runs on every (or selected) node',
+      Service: 'exposes a set of pods on a stable network address',
+      Ingress: 'routes external HTTP/HTTPS traffic to services inside the cluster',
+      ConfigMap: 'stores non-sensitive configuration data as key-value pairs',
+      Secret: 'stores sensitive data (base64 encoded)',
+      PersistentVolumeClaim: 'requests persistent storage from a StorageClass',
+      NetworkPolicy: 'defines firewall rules for pod ingress/egress traffic',
+      HorizontalPodAutoscaler: 'automatically scales pod replicas based on metrics',
+      CronJob: 'runs Jobs on a cron schedule',
+      Job: 'runs a task to completion',
+      ServiceAccount: 'provides an identity for pods to authenticate with the API server',
+      Namespace: 'provides a virtual cluster within the physical cluster',
+    };
+    summary = kindSummaries[kind] || 'a Kubernetes resource';
+
+    // Check for common issues
+    if(!input.includes('resources:') && ['Deployment','StatefulSet','DaemonSet','Job','CronJob'].includes(kind))
+      issues.push('Missing resources.requests/limits — pods may be OOMKilled or starve other workloads.');
+    if(!input.includes('readinessProbe') && ['Deployment','StatefulSet'].includes(kind))
+      issues.push('No readinessProbe — traffic may be sent to pods that are not ready yet.');
+    if(!input.includes('livenessProbe') && ['Deployment','StatefulSet'].includes(kind))
+      issues.push('No livenessProbe — stuck pods will not be automatically restarted.');
+    if(input.includes(':latest') || input.match(/image:\s+\S+(?<![:\d])\s*$/m))
+      issues.push('Image tag ":latest" detected — use a specific version tag for reproducible deployments.');
+    if(!input.includes('namespace:'))
+      issues.push('No namespace specified — resource will go to the "default" namespace.');
+    if(input.includes('runAsRoot: true') || (!input.includes('runAsNonRoot') && ['Deployment','StatefulSet','DaemonSet'].includes(kind)))
+      issues.push('No securityContext.runAsNonRoot — container may run as root, which is a security risk.');
+    if(!input.includes('app:') && ['Deployment','StatefulSet','Service'].includes(kind))
+      issues.push('No app: label — standard practice is to label pods with app: <name> for service selectors.');
+
+    // Improvements
+    if(!input.includes('podDisruptionBudget') && ['Deployment','StatefulSet'].includes(kind))
+      improvements.push('Add a PodDisruptionBudget to ensure availability during node drains.');
+    if(!input.includes('topologySpreadConstraints') && kind==='Deployment')
+      improvements.push('Consider topologySpreadConstraints to spread pods across zones/nodes.');
+    if(!input.includes('strategy') && kind==='Deployment')
+      improvements.push('Explicitly define strategy.rollingUpdate (maxSurge/maxUnavailable) for controlled rollouts.');
+    if(!input.includes('preStop') && ['Deployment','StatefulSet'].includes(kind))
+      improvements.push('Add lifecycle.preStop hook (e.g. sleep 5) for graceful connection draining.');
+    if(kind==='Secret' && !input.includes('stringData'))
+      improvements.push('Use stringData: instead of data: — Kubernetes base64-encodes stringData automatically, preventing encoding mistakes.');
+
+    const fieldGuide = {
+      'apiVersion': 'Specifies the API group and version. Use `kubectl api-versions` to list available versions.',
+      'kind': `Resource type. "${kind}" ${summary}.`,
+      'metadata.name': 'Unique name within the namespace. Must match DNS label format (lowercase, hyphens).',
+      'metadata.namespace': `Namespace isolation boundary. Defaults to "default" if omitted.`,
+      'metadata.labels': 'Key-value tags used for selectors, filtering, and monitoring aggregation.',
+      'spec.replicas': 'Desired number of pod copies. Actual count managed by ReplicaSet.',
+      'spec.selector': 'Must match pod template labels — defines which pods this resource owns.',
+      'spec.template': 'Pod template — the spec used to create each pod replica.',
+      'spec.containers': 'List of containers in the pod. All share the same network namespace.',
+      'resources.requests': 'Minimum resources guaranteed to the container. Used for scheduling decisions.',
+      'resources.limits': 'Maximum resources the container can use. Exceeding memory limit = OOMKill.',
+    };
+
+    const fieldLines = Object.entries(fieldGuide).map(([k,v]) => `  ${k}:\n    ${v}`).join('\n\n');
+    const issueLines = issues.length ? issues.map(i=>`  ⚠ ${i}`).join('\n') : '  ✓ No obvious issues detected.';
+    const improvLines = improvements.length ? improvements.map(i=>`  → ${i}`).join('\n') : '  ✓ Manifest looks solid for a start.';
+
+    outEl.textContent =
+`SUMMARY
+This is a ${kind} named "${name||'<unnamed>'}"${ns?' in namespace "'+ns+'"':''} — it ${summary}.
+
+FIELD GUIDE (key fields explained)
+${fieldLines}
+
+ISSUES DETECTED
+${issueLines}
+
+IMPROVEMENTS
+${improvLines}
+
+─────────────────────────────────────────────
+Generated offline by KubeLab — kubelab.eknathalabs.com`;
+
+  // ── NETWORK POLICY BUILDER ──────────────────────────────────────────────────
   } else if(id==='netpol') {
-    const srcNs=document.getElementById('netpol-src-ns').value||'frontend';
-    const dstNs=document.getElementById('netpol-dst-ns').value||'backend';
-    const app=document.getElementById('netpol-app').value||'api';
-    const port=document.getElementById('netpol-port').value||'8080';
-    const type=document.getElementById('netpol-type').value;
-    prompt=`Generate a Kubernetes NetworkPolicy YAML for: ${type} policy.
-Source namespace: ${srcNs}, Target namespace: ${dstNs}, Target app label: ${app}, Port: ${port}.
-Output only the YAML, no explanations, with inline comments explaining each field.`;
+    const srcNs  = document.getElementById('netpol-src-ns').value.trim() || 'frontend';
+    const dstNs  = document.getElementById('netpol-dst-ns').value.trim() || 'backend';
+    const app    = document.getElementById('netpol-app').value.trim() || 'api';
+    const port   = document.getElementById('netpol-port').value.trim() || '8080';
+    const type   = document.getElementById('netpol-type').value;
+
+    let spec = '';
+    if(type==='denyall') {
+      spec = `spec:
+  podSelector: {}           # applies to ALL pods in namespace
+  policyTypes:
+  - Ingress
+  - Egress
+  # No ingress/egress rules = deny everything`;
+    } else if(type==='ingress') {
+      spec = `spec:
+  podSelector:
+    matchLabels:
+      app: ${app}           # applies to pods with this label
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: ${srcNs}   # allow from this namespace
+    - podSelector: {}       # any pod in that namespace
+    ports:
+    - protocol: TCP
+      port: ${port}`;
+    } else if(type==='egress') {
+      spec = `spec:
+  podSelector:
+    matchLabels:
+      app: ${app}
+  policyTypes:
+  - Egress
+  egress:
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: ${dstNs}
+    ports:
+    - protocol: TCP
+      port: ${port}
+  - to:                     # always allow DNS
+    - namespaceSelector: {}
+    ports:
+    - protocol: UDP
+      port: 53`;
+    } else {
+      spec = `spec:
+  podSelector:
+    matchLabels:
+      app: ${app}
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: ${srcNs}
+    ports:
+    - protocol: TCP
+      port: ${port}
+  egress:
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: ${dstNs}
+    ports:
+    - protocol: TCP
+      port: ${port}
+  - to:                     # allow DNS egress always
+    - namespaceSelector: {}
+    ports:
+    - protocol: UDP
+      port: 53`;
+    }
+
+    outEl.textContent =
+`# NetworkPolicy — ${type.toUpperCase()} — generated offline
+# Apply with: kubectl apply -f netpol-${app}.yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: ${app}-${type}-policy
+  namespace: ${dstNs}
+  labels:
+    app: ${app}
+${spec}
+
+# ── Verify ─────────────────────────────────────────────────────────────────
+# kubectl get netpol -n ${dstNs}
+# kubectl describe netpol ${app}-${type}-policy -n ${dstNs}
+# Test connectivity from a pod:
+# kubectl run test --image=busybox --rm -it -- wget -qO- http://${app}.${dstNs}:${port}
+
+# Generated by KubeLab — kubelab.eknathalabs.com`;
+
+  // ── RBAC GENERATOR ──────────────────────────────────────────────────────────
   } else if(id==='rbac') {
-    const desc=document.getElementById('t-rbac').value.trim();
-    const sa=document.getElementById('rbac-sa').value||'my-sa';
-    const ns=document.getElementById('rbac-ns').value||'default';
-    if(!desc){outEl.textContent='Please describe what the service account needs to do.';outEl.classList.remove('loading-dots');return;}
-    prompt=`Generate Kubernetes RBAC YAML (Role + RoleBinding) for this requirement:
-ServiceAccount name: ${sa}, Namespace: ${ns}
-Requirement: ${desc}
-Output only valid YAML with inline comments. Follow least-privilege principle.`;
+    const sa       = (document.getElementById('rbac-sa').value.trim() || 'my-sa').toLowerCase();
+    const ns       = document.getElementById('rbac-ns').value.trim() || 'default';
+    const verbsPre = document.getElementById('rbac-verbs').value;
+    const scope    = document.getElementById('rbac-scope').value;
+    const roleName = (document.getElementById('rbac-role-name').value.trim() || `${sa}-role`).toLowerCase();
+
+    const resIds = ['deployments','pods','services','configmaps','secrets','jobs','ingresses','pvcs'];
+    const resApiGroups = {
+      deployments:['apps'], pods:[''], services:[''], configmaps:[''], secrets:[''],
+      jobs:['batch'], ingresses:['networking.k8s.io'], pvcs:['']
+    };
+    const selectedRes = resIds.filter(r => document.getElementById('rbac-res-'+r)?.checked);
+    if(!selectedRes.length) selectedRes.push('pods');
+
+    const verbMap = {
+      read: ['get','list','watch'],
+      readwrite: ['get','list','watch','create','update','patch'],
+      full: ['get','list','watch','create','update','patch','delete','deletecollection'],
+      nodelete: ['get','list','watch','create','update','patch']
+    };
+    const verbs = verbMap[verbsPre];
+    const verbStr = verbs.map(v=>`"${v}"`).join(',');
+
+    const rulesBlock = selectedRes.map(r => {
+      const ag = (resApiGroups[r]||['']).map(g=>`"${g}"`).join(',');
+      return `- apiGroups: [${ag}]\n  resources: ["${r}"]\n  verbs: [${verbStr}]`;
+    }).join('\n');
+
+    const kindLabel = scope === 'clusterrole' ? 'ClusterRole' : 'Role';
+    const bindingKind = scope === 'clusterrole' ? 'ClusterRoleBinding' : 'RoleBinding';
+    const nsMeta = scope === 'role' ? `\n  namespace: ${ns}` : '';
+
+    outEl.textContent =
+`# RBAC — ${kindLabel} + ${bindingKind} — generated offline
+# Apply with: kubectl apply -f rbac-${sa}.yaml
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: ${sa}
+  namespace: ${ns}
+  labels:
+    app: ${sa}
+automountServiceAccountToken: false   # disable unless needed
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ${kindLabel}
+metadata:
+  name: ${roleName}${nsMeta}
+  labels:
+    app: ${sa}
+rules:
+${rulesBlock}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ${bindingKind}
+metadata:
+  name: ${sa}-binding${nsMeta}
+  labels:
+    app: ${sa}
+subjects:
+- kind: ServiceAccount
+  name: ${sa}
+  namespace: ${ns}
+roleRef:
+  kind: ${kindLabel}
+  name: ${roleName}
+  apiGroup: rbac.authorization.k8s.io
+
+# ── Verify ─────────────────────────────────────────────────────────────────
+${selectedRes.map(r=>`# kubectl auth can-i ${verbs[0]} ${r} --as=system:serviceaccount:${ns}:${sa} -n ${ns}`).join('\n')}
+
+# Generated by KubeLab — kubelab.eknathalabs.com`;
+
+  // ── PROMQL BUILDER ──────────────────────────────────────────────────────────
   } else if(id==='promql') {
-    const desc=document.getElementById('t-promql').value.trim();
-    if(!desc){outEl.textContent='Please describe what you want to monitor.';outEl.classList.remove('loading-dots');return;}
-    prompt=`You are a Prometheus/PromQL expert. Generate PromQL queries for: ${desc}
-Provide:
-1. QUERY: The PromQL expression
-2. EXPLANATION: What each part means
-3. VARIATIONS: 2-3 alternative queries for related metrics
-4. ALERT RULE: A sample Prometheus alert rule using this query
+    const cat       = document.getElementById('promql-cat').value;
+    const ns        = document.getElementById('promql-ns').value.trim();
+    const window_   = document.getElementById('promql-window').value;
+    const threshold = document.getElementById('promql-threshold').value.trim() || '80';
+    const nsFilter  = ns ? `, namespace="${ns}"` : '';
 
-Use plain text with clear labels.`;
+    const templates = {
+      cpu: {
+        title: 'CPU Usage',
+        queries: [
+          {label:'CPU usage % per pod', q:`100 * sum(rate(container_cpu_usage_seconds_total{container!=""${nsFilter}}[${window_}])) by (pod, namespace) / sum(kube_pod_container_resource_limits{resource="cpu"${nsFilter}}) by (pod, namespace)`},
+          {label:'CPU throttling % per container', q:`100 * sum(rate(container_cpu_cfs_throttled_seconds_total{container!=""${nsFilter}}[${window_}])) by (pod, container) / sum(rate(container_cpu_cfs_periods_total{container!=""${nsFilter}}[${window_}])) by (pod, container)`},
+          {label:'Node CPU utilisation %', q:`100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[${window_}])) * 100)`},
+        ],
+        alertMetric: `avg(rate(container_cpu_usage_seconds_total{container!=""${nsFilter}}[${window_}])) by (pod)`,
+        alertExpr: `> ${parseFloat(threshold)/100}`,
+        alertName: 'HighCPUUsage',
+      },
+      memory: {
+        title: 'Memory Usage',
+        queries: [
+          {label:'Memory usage % per pod vs limit', q:`100 * sum(container_memory_working_set_bytes{container!=""${nsFilter}}) by (pod, namespace) / sum(kube_pod_container_resource_limits{resource="memory"${nsFilter}}) by (pod, namespace)`},
+          {label:'Memory usage bytes per container', q:`sum(container_memory_working_set_bytes{container!=""${nsFilter}}) by (pod, container, namespace)`},
+          {label:'OOM kills count (last 1h)', q:`increase(kube_pod_container_status_last_terminated_reason{reason="OOMKilled"${nsFilter}}[1h])`},
+        ],
+        alertMetric: `sum(container_memory_working_set_bytes{container!=""${nsFilter}}) by (pod) / sum(kube_pod_container_resource_limits{resource="memory"${nsFilter}}) by (pod)`,
+        alertExpr: `> ${parseFloat(threshold)/100}`,
+        alertName: 'HighMemoryUsage',
+      },
+      pods: {
+        title: 'Pod Restarts & Availability',
+        queries: [
+          {label:'Pod restart rate per 5m', q:`rate(kube_pod_container_status_restarts_total{${ns?'namespace="'+ns+'"':''}}[${window_}]) * 60`},
+          {label:'Number of non-running pods', q:`count by (namespace, phase) (kube_pod_status_phase{phase!="Running", phase!="Succeeded"${nsFilter}})`},
+          {label:'Deployment availability ratio', q:`kube_deployment_status_replicas_available{${ns?'namespace="'+ns+'"':''}} / kube_deployment_spec_replicas{${ns?'namespace="'+ns+'"':''}}`},
+        ],
+        alertMetric: `rate(kube_pod_container_status_restarts_total{${ns?'namespace="'+ns+'"':''}}[${window_}])`,
+        alertExpr: `> 0.05`,
+        alertName: 'HighPodRestartRate',
+      },
+      network: {
+        title: 'Network Traffic',
+        queries: [
+          {label:'Network receive rate (bytes/s) per pod', q:`sum(rate(container_network_receive_bytes_total{${ns?'namespace="'+ns+'"':''}}[${window_}])) by (pod, namespace)`},
+          {label:'Network transmit rate (bytes/s) per pod', q:`sum(rate(container_network_transmit_bytes_total{${ns?'namespace="'+ns+'"':''}}[${window_}])) by (pod, namespace)`},
+          {label:'Network receive errors per pod', q:`sum(rate(container_network_receive_errors_total{${ns?'namespace="'+ns+'"':''}}[${window_}])) by (pod, namespace)`},
+        ],
+        alertMetric: `sum(rate(container_network_receive_errors_total{${ns?'namespace="'+ns+'"':''}}[${window_}])) by (pod)`,
+        alertExpr: `> 10`,
+        alertName: 'HighNetworkErrors',
+      },
+      storage: {
+        title: 'Storage / PVC',
+        queries: [
+          {label:'PVC usage % per PVC', q:`100 * kubelet_volume_stats_used_bytes / kubelet_volume_stats_capacity_bytes`},
+          {label:'PVC inodes used %', q:`100 * kubelet_volume_stats_inodes_used / kubelet_volume_stats_inodes`},
+          {label:'PVCs not bound', q:`kube_persistentvolumeclaim_status_phase{phase!="Bound"${nsFilter}}`},
+        ],
+        alertMetric: `kubelet_volume_stats_used_bytes / kubelet_volume_stats_capacity_bytes`,
+        alertExpr: `> ${parseFloat(threshold)/100}`,
+        alertName: 'PVCNearlyFull',
+      },
+      latency: {
+        title: 'HTTP Latency (ingress-nginx)',
+        queries: [
+          {label:'P99 request latency per ingress (seconds)', q:`histogram_quantile(0.99, sum(rate(nginx_ingress_controller_request_duration_seconds_bucket{${ns?'namespace="'+ns+'"':''}}[${window_}])) by (ingress, le))`},
+          {label:'P50 request latency per ingress', q:`histogram_quantile(0.50, sum(rate(nginx_ingress_controller_request_duration_seconds_bucket{${ns?'namespace="'+ns+'"':''}}[${window_}])) by (ingress, le))`},
+          {label:'Average request duration', q:`sum(rate(nginx_ingress_controller_request_duration_seconds_sum{${ns?'namespace="'+ns+'"':''}}[${window_}])) by (ingress) / sum(rate(nginx_ingress_controller_request_duration_seconds_count{${ns?'namespace="'+ns+'"':''}}[${window_}])) by (ingress)`},
+        ],
+        alertMetric: `histogram_quantile(0.99, sum(rate(nginx_ingress_controller_request_duration_seconds_bucket[${window_}])) by (ingress, le))`,
+        alertExpr: `> ${parseFloat(threshold)/1000}`,
+        alertName: 'HighP99Latency',
+      },
+      errors: {
+        title: 'HTTP Error Rate',
+        queries: [
+          {label:'HTTP 5xx error rate per ingress', q:`sum(rate(nginx_ingress_controller_requests{status=~"5..",${ns?'namespace="'+ns+'",':''}}[${window_}])) by (ingress) / sum(rate(nginx_ingress_controller_requests{${ns?'namespace="'+ns+'"':''}}[${window_}])) by (ingress)`},
+          {label:'HTTP 4xx rate per ingress', q:`sum(rate(nginx_ingress_controller_requests{status=~"4..",${ns?'namespace="'+ns+'",':''}}[${window_}])) by (ingress) / sum(rate(nginx_ingress_controller_requests{${ns?'namespace="'+ns+'"':''}}[${window_}])) by (ingress))`},
+          {label:'Total error count per service', q:`sum(increase(nginx_ingress_controller_requests{status=~"[45].."${nsFilter?','+nsFilter.slice(2):'}}'}[${window_}])) by (service)`},
+        ],
+        alertMetric: `sum(rate(nginx_ingress_controller_requests{status=~"5.."}[${window_}])) / sum(rate(nginx_ingress_controller_requests[${window_}]))`,
+        alertExpr: `> ${parseFloat(threshold)/100}`,
+        alertName: 'HighErrorRate',
+      },
+      nodes: {
+        title: 'Node Health',
+        queries: [
+          {label:'Node not ready count', q:`count(kube_node_status_condition{condition="Ready",status!="true"})`},
+          {label:'Node CPU utilisation %', q:`100 - avg by(node) (rate(node_cpu_seconds_total{mode="idle"}[${window_}]) * 100)`},
+          {label:'Node memory available %', q:`100 * node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes`},
+        ],
+        alertMetric: `kube_node_status_condition{condition="Ready",status="false"}`,
+        alertExpr: `== 1`,
+        alertName: 'NodeNotReady',
+      },
+    };
+
+    const t = templates[cat];
+    const queryLines = t.queries.map((q,i) => `# ${i+1}. ${q.label}\n${q.q}`).join('\n\n');
+
+    outEl.textContent =
+`# PromQL Queries — ${t.title}
+# Time window: ${window_}${ns?' | Namespace: '+ns:''}
+# Generated offline by KubeLab
+
+${queryLines}
+
+─────────────────────────────────────────────
+# PROMETHEUS ALERT RULE (paste into alerting rules YAML)
+
+groups:
+- name: kubelab.${cat}.rules
+  rules:
+  - alert: ${t.alertName}
+    expr: |
+      ${t.alertMetric}
+      ${t.alertExpr}
+    for: 5m
+    labels:
+      severity: warning${ns?'\n      namespace: '+ns:''}
+    annotations:
+      summary: "${t.alertName} detected"
+      description: "{{ $labels.pod }} — value {{ $value | humanize }}"
+
+# Paste the alert into PrometheusRule CR:
+# kubectl apply -f alert-${cat}.yaml
+# kubectl get prometheusrules -A
+
+# Generated by KubeLab — kubelab.eknathalabs.com`;
+
+  // ── HELM VALUES GENERATOR ───────────────────────────────────────────────────
   } else if(id==='helm-gen') {
-    const chart=document.getElementById('helm-chart').value||'nginx';
-    const env=document.getElementById('helm-env').value;
-    const replicas=document.getElementById('helm-replicas').value||'3';
-    const extra=document.getElementById('helm-extra').value;
-    prompt=`Generate a production-grade Helm values.yaml for the ${chart} chart, environment: ${env}, replicas: ${replicas}. ${extra?'Additional requirements: '+extra:''}
-Include: resource requests/limits, HPA config if applicable, health checks, security context, and inline comments explaining each section. Output only YAML.`;
+    const chart    = document.getElementById('helm-chart').value;
+    const env      = document.getElementById('helm-env').value;
+    const replicas = parseInt(document.getElementById('helm-replicas').value) || 3;
+    const extra    = document.getElementById('helm-extra').value.trim();
+    const isProd   = env === 'production';
+    const isDev    = env === 'development';
+
+    const helmTemplates = {
+      nginx: `# values.yaml — ingress-nginx — ${env}
+# helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx -f values.yaml -n ingress-nginx
+
+controller:
+  replicaCount: ${replicas}
+  resources:
+    requests:
+      cpu: ${isDev?'50m':'200m'}
+      memory: ${isDev?'64Mi':'256Mi'}
+    limits:
+      cpu: ${isDev?'200m':'1000m'}
+      memory: ${isDev?'128Mi':'512Mi'}
+  autoscaling:
+    enabled: ${isProd}
+    minReplicas: ${Math.max(2, replicas)}
+    maxReplicas: ${replicas * 3}
+    targetCPUUtilizationPercentage: 70
+  podDisruptionBudget:
+    enabled: ${isProd}
+    minAvailable: ${Math.max(1, replicas - 1)}
+  config:
+    use-forwarded-headers: "true"
+    proxy-body-size: "10m"
+    worker-processes: "auto"
+  metrics:
+    enabled: ${isProd}
+    serviceMonitor:
+      enabled: ${isProd}`,
+
+      postgres: `# values.yaml — postgresql — ${env}
+# helm upgrade --install postgres bitnami/postgresql -f values.yaml -n ${env}
+
+primary:
+  replicaCount: 1
+  resources:
+    requests:
+      cpu: ${isDev?'100m':'500m'}
+      memory: ${isDev?'256Mi':'1Gi'}
+    limits:
+      cpu: ${isDev?'500m':'2000m'}
+      memory: ${isDev?'512Mi':'2Gi'}
+  persistence:
+    enabled: true
+    size: ${isDev?'5Gi':'50Gi'}
+    storageClass: ""    # use cluster default
+
+auth:
+  postgresPassword: ""        # set via --set auth.postgresPassword=<secret>
+  database: "appdb"
+  username: "appuser"
+  password: ""                # set via --set auth.password=<secret>
+
+metrics:
+  enabled: ${isProd}
+  serviceMonitor:
+    enabled: ${isProd}
+
+backup:
+  enabled: ${isProd}          # requires pgbackrest or similar`,
+
+      redis: `# values.yaml — redis — ${env}
+# helm upgrade --install redis bitnami/redis -f values.yaml -n ${env}
+
+architecture: ${isProd?'replication':'standalone'}
+auth:
+  enabled: true
+  password: ""              # set via --set auth.password=<secret>
+
+master:
+  resources:
+    requests:
+      cpu: ${isDev?'50m':'200m'}
+      memory: ${isDev?'64Mi':'256Mi'}
+    limits:
+      cpu: ${isDev?'200m':'1000m'}
+      memory: ${isDev?'128Mi':'512Mi'}
+  persistence:
+    enabled: ${isProd}
+    size: ${isProd?'10Gi':'1Gi'}
+
+replica:
+  replicaCount: ${isProd?2:0}
+  resources:
+    requests:
+      cpu: ${isDev?'50m':'100m'}
+      memory: ${isDev?'64Mi':'128Mi'}
+    limits:
+      cpu: ${isDev?'200m':'500m'}
+      memory: ${isDev?'128Mi':'256Mi'}
+
+metrics:
+  enabled: ${isProd}
+  serviceMonitor:
+    enabled: ${isProd}`,
+
+      kafka: `# values.yaml — kafka — ${env}
+# helm upgrade --install kafka bitnami/kafka -f values.yaml -n ${env}
+
+replicaCount: ${isProd?3:1}
+resources:
+  requests:
+    cpu: ${isDev?'250m':'1000m'}
+    memory: ${isDev?'512Mi':'2Gi'}
+  limits:
+    cpu: ${isDev?'1000m':'4000m'}
+    memory: ${isDev?'1Gi':'4Gi'}
+persistence:
+  enabled: ${isProd}
+  size: ${isProd?'50Gi':'10Gi'}
+zookeeper:
+  replicaCount: ${isProd?3:1}
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+metrics:
+  kafka:
+    enabled: ${isProd}
+  jmx:
+    enabled: ${isProd}`,
+
+      prometheus: `# values.yaml — kube-prometheus-stack — ${env}
+# helm upgrade --install prometheus prometheus-community/kube-prometheus-stack -f values.yaml -n monitoring
+
+grafana:
+  enabled: true
+  adminPassword: ""       # set via --set grafana.adminPassword=<secret>
+  persistence:
+    enabled: ${isProd}
+    size: 5Gi
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+prometheus:
+  prometheusSpec:
+    retention: ${isProd?'30d':'7d'}
+    retentionSize: ${isProd?'50GB':'10GB'}
+    replicas: ${isProd?2:1}
+    resources:
+      requests:
+        cpu: ${isDev?'200m':'500m'}
+        memory: ${isDev?'512Mi':'2Gi'}
+      limits:
+        cpu: ${isDev?'1000m':'4000m'}
+        memory: ${isDev?'1Gi':'8Gi'}
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: ${isProd?'50Gi':'10Gi'}
+
+alertmanager:
+  enabled: ${isProd}
+  alertmanagerSpec:
+    replicas: ${isProd?2:1}`,
+
+      'cert-manager': `# values.yaml — cert-manager — ${env}
+# helm upgrade --install cert-manager jetstack/cert-manager -f values.yaml -n cert-manager --set installCRDs=true
+
+replicaCount: ${isProd?2:1}
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    cpu: 200m
+    memory: 256Mi
+webhook:
+  replicaCount: ${isProd?2:1}
+cainjector:
+  replicaCount: ${isProd?2:1}
+prometheus:
+  enabled: ${isProd}
+  servicemonitor:
+    enabled: ${isProd}`,
+
+      'argo-cd': `# values.yaml — argo-cd — ${env}
+# helm upgrade --install argocd argo/argo-cd -f values.yaml -n argocd
+
+server:
+  replicas: ${isProd?2:1}
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+  ingress:
+    enabled: false          # set to true and configure host to expose UI
+
+repoServer:
+  replicas: ${isProd?2:1}
+  resources:
+    requests:
+      cpu: 200m
+      memory: 256Mi
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+
+applicationSet:
+  enabled: ${isProd}
+
+configs:
+  params:
+    server.insecure: ${!isProd}  # false in prod — use TLS`,
+
+      generic: `# values.yaml — generic app — ${env}
+# helm upgrade --install my-app ./my-chart -f values.yaml -n ${env}
+
+replicaCount: ${replicas}
+
+image:
+  repository: my-registry/my-app
+  tag: "1.0.0"              # pin to a specific tag
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: ${isProd}
+  className: nginx
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  hosts:
+  - host: my-app.example.com
+    paths:
+    - path: /
+      pathType: Prefix
+
+resources:
+  requests:
+    cpu: ${isDev?'50m':'100m'}
+    memory: ${isDev?'64Mi':'128Mi'}
+  limits:
+    cpu: ${isDev?'200m':'500m'}
+    memory: ${isDev?'128Mi':'256Mi'}
+
+autoscaling:
+  enabled: ${isProd}
+  minReplicas: ${Math.max(2, replicas)}
+  maxReplicas: ${replicas * 3}
+  targetCPUUtilizationPercentage: 70
+
+podDisruptionBudget:
+  enabled: ${isProd}
+  minAvailable: ${Math.max(1, replicas-1)}
+
+securityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  readOnlyRootFilesystem: true`,
+    };
+
+    const yaml = helmTemplates[chart] || helmTemplates['generic'];
+    const extraNote = extra ? `\n# Note: Additional requirements noted: ${extra}` : '';
+    outEl.textContent = yaml + extraNote + `\n\n# Generated offline by KubeLab — kubelab.eknathalabs.com`;
+
+  // ── RESOURCE CALCULATOR ──────────────────────────────────────────────────────
   } else if(id==='resource-calc') {
-    const type=document.getElementById('res-type').value;
-    const rps=document.getElementById('res-rps').value||'100';
-    const replicas=document.getElementById('res-replicas').value||'3';
-    const env=document.getElementById('res-env').value;
-    prompt=`As a Kubernetes resource planning expert, recommend CPU and memory requests/limits for:
-App type: ${type}, Expected RPS: ${rps}, Replicas: ${replicas}, Environment: ${env}
+    const appType  = document.getElementById('res-type').value;
+    const rps      = parseFloat(document.getElementById('res-rps').value) || 100;
+    const replicas = parseInt(document.getElementById('res-replicas').value) || 3;
+    const env      = document.getElementById('res-env').value;
 
-Provide:
-1. RECOMMENDED RESOURCES: requests.cpu, requests.memory, limits.cpu, limits.memory
-2. REASONING: Why these values
-3. YAML: The resources block ready to paste
-4. HPA: Suggested HPA configuration if applicable
+    const isProd = env === 'production';
+    const rpsPerReplica = rps / replicas;
 
-Plain text with clear sections.`;
+    // Base profiles per app type (at ~100 RPS baseline)
+    const profiles = {
+      'Node.js API':        { cpuBase:0.1, cpuPerRPS:0.001, memBase:128, memPerRPS:0.5,  startup:'fast',   notes:'V8 JIT warmup adds ~200ms. Keep heap <512MB.' },
+      'Python/Django':      { cpuBase:0.15, cpuPerRPS:0.002, memBase:192, memPerRPS:0.8, startup:'medium', notes:'GIL limits CPU. Use gunicorn --workers=2-4. Consider gevent for I/O.' },
+      'Java Spring Boot':   { cpuBase:0.25, cpuPerRPS:0.002, memBase:512, memPerRPS:1.0, startup:'slow',   notes:'JVM needs 512Mi+ heap. Use -Xmx to cap. Add startupProbe with 60s delay.' },
+      'Go microservice':    { cpuBase:0.05, cpuPerRPS:0.0005, memBase:64, memPerRPS:0.2, startup:'fast',  notes:'Very efficient. GOMAXPROCS auto-matches CPU limit.' },
+      'nginx/static':       { cpuBase:0.05, cpuPerRPS:0.0003, memBase:32, memPerRPS:0.1, startup:'fast',  notes:'Worker processes = vCPU count. Mostly I/O bound.' },
+      'Redis':              { cpuBase:0.1,  cpuPerRPS:0.001, memBase:256, memPerRPS:2.0,  startup:'fast',  notes:'Memory = dataset size + 25% overhead. Use maxmemory policy.' },
+      'PostgreSQL':         { cpuBase:0.25, cpuPerRPS:0.003, memBase:256, memPerRPS:1.5,  startup:'medium',notes:'shared_buffers = 25% of memory. effective_cache_size = 75%.' },
+      'Kafka':              { cpuBase:0.5,  cpuPerRPS:0.002, memBase:1024, memPerRPS:3.0, startup:'slow',  notes:'Heap limited to 6Gi. Most memory is OS page cache — give it a big limit.' },
+    };
+
+    const p = profiles[appType] || profiles['Node.js API'];
+    const scaleFactor = isProd ? 1.5 : 1.0;
+
+    const cpuReq  = Math.max(p.cpuBase, p.cpuBase + p.cpuPerRPS * rpsPerReplica);
+    const cpuLim  = cpuReq * 2 * scaleFactor;
+    const memReq  = Math.max(p.memBase, p.memBase + p.memPerRPS * rpsPerReplica);
+    const memLim  = memReq * 1.5 * scaleFactor;
+
+    const fmtCPU = v => v >= 1 ? `${v.toFixed(2)}` : `${Math.round(v*1000)}m`;
+    const fmtMem = v => v >= 1024 ? `${(v/1024).toFixed(1)}Gi` : `${Math.round(v)}Mi`;
+
+    const hpaMin  = Math.max(2, replicas);
+    const hpaMax  = replicas * 3;
+
+    outEl.textContent =
+`RECOMMENDED RESOURCES — ${appType} — ${env}
+RPS: ${rps} total / ~${rpsPerReplica.toFixed(0)} per replica | Replicas: ${replicas}
+
+  requests.cpu:    ${fmtCPU(cpuReq)}
+  requests.memory: ${fmtMem(memReq)}
+  limits.cpu:      ${fmtCPU(cpuLim)}
+  limits.memory:   ${fmtMem(memLim)}
+
+REASONING
+${p.notes}
+CPU limit = 2× request (allow bursting). Memory limit = 1.5× request (OOM buffer).
+${isProd ? 'Production: +50% headroom added for traffic spikes.' : ''}
+
+YAML — paste directly into container spec:
+
+        resources:
+          requests:
+            cpu: "${fmtCPU(cpuReq)}"
+            memory: "${fmtMem(memReq)}"
+          limits:
+            cpu: "${fmtCPU(cpuLim)}"
+            memory: "${fmtMem(memLim)}"
+
+HPA — suggested autoscaling config:
+
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: my-app-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: my-app
+  minReplicas: ${hpaMin}
+  maxReplicas: ${hpaMax}
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+
+─────────────────────────────────────────────
+Generated offline by KubeLab — kubelab.eknathalabs.com`;
+
+  // ── DOCKERFILE LINTER ───────────────────────────────────────────────────────
   } else if(id==='dockerfile-lint') {
-    const input=document.getElementById('t-dockerfile-lint').value.trim();
-    if(!input){outEl.textContent='Please paste a Dockerfile first.';outEl.classList.remove('loading-dots');return;}
-    prompt=`You are a Docker security and optimization expert. Analyze this Dockerfile:
+    const input = document.getElementById('t-dockerfile-lint').value.trim();
+    if(!input){outEl.style.color='var(--red)';outEl.textContent='Please paste a Dockerfile first.';return;}
 
-${input}
+    const lines = input.split('\n');
+    const security=[], optimization=[], bestPractice=[];
+    let baseImage='', hasUser=false, hasHealthcheck=false, hasMultiStage=false;
+    let hasDockerignore=false, copyCount=0, runCount=0, aptUpdateSplit=false;
+    const stageCount = lines.filter(l => /^FROM\s/i.test(l.trim())).length;
+    hasMultiStage = stageCount > 1;
 
-Provide:
-1. SECURITY ISSUES: List any security problems (running as root, latest tags, exposed secrets, etc.)
-2. OPTIMIZATION: Layer caching improvements, multi-stage build opportunities, size reduction
-3. BEST PRACTICES: Missing practices (HEALTHCHECK, non-root user, .dockerignore, etc.)
-4. IMPROVED VERSION: Rewrite the Dockerfile with all issues fixed, with comments
+    lines.forEach(l => {
+      const t = l.trim();
+      if(/^FROM\s/i.test(t)) {
+        const img = t.replace(/^FROM\s+/i,'').split(/\s+/)[0];
+        if(!baseImage) baseImage = img;
+        if(/:latest$/i.test(img) || !/:/.test(img)) security.push(`"${img}" uses :latest or no tag — pin to a specific digest or version for reproducibility.`);
+        if(/^ubuntu|^debian|^centos/i.test(img) && !/slim|alpine|distroless/i.test(img)) optimization.push(`"${img}" is a large base image — consider using a -slim, alpine, or distroless variant to reduce image size.`);
+      }
+      if(/^USER\s+root/i.test(t) || /^USER\s+0/i.test(t)) security.push('USER root detected — running as root is a security risk. Use a non-root user.');
+      if(/^USER\s+(?!root|0)/i.test(t)) hasUser = true;
+      if(/^HEALTHCHECK/i.test(t)) hasHealthcheck = true;
+      if(/^RUN\s/i.test(t)) {
+        runCount++;
+        if(/apt-get update/.test(t) && !/apt-get install/.test(t)) aptUpdateSplit = true;
+        if(/apt-get install/.test(t) && !/--no-install-recommends/.test(t)) optimization.push('apt-get install without --no-install-recommends — adds unnecessary packages and increases image size.');
+        if(/&&\s*rm\s+-rf\s+\/var\/lib\/apt/i.test(t)===false && /apt-get install/i.test(t)) optimization.push('After apt-get install, clean apt cache: && rm -rf /var/lib/apt/lists/*');
+        if(/curl\s+http:\/\//i.test(t) || /wget\s+http:\/\//i.test(t)) security.push('Downloading over plain HTTP (not HTTPS) in RUN — use HTTPS for security.');
+        if(/password|secret|key|token/i.test(t) && !/ARG\s/i.test(t)) security.push('Possible secret in RUN command — never embed secrets in Dockerfile. Use BuildKit secrets or ARG.');
+      }
+      if(/^COPY\s/i.test(t)) {
+        copyCount++;
+        if(/COPY\s+\.\s+/i.test(t) && !hasDockerignore) optimization.push('COPY . copies everything including node_modules, .git etc. — add a .dockerignore file.');
+        hasDockerignore = true; // assume note already given
+      }
+      if(/^ENV\s+.*(PASSWORD|SECRET|KEY|TOKEN)/i.test(t)) security.push('Sensitive value in ENV — environment variables are visible in `docker inspect`. Use runtime secrets instead.');
+      if(/^ADD\s+http/i.test(t)) bestPractice.push('ADD with URL — use RUN curl/wget instead of ADD for URL downloads (ADD does not verify checksums).');
+    });
 
-Plain text with clear sections.`;
+    if(!hasUser) security.push('No USER instruction — container will run as root. Add: RUN addgroup -S app && adduser -S app -G app\nUSER app');
+    if(!hasHealthcheck) bestPractice.push('No HEALTHCHECK instruction — add one so orchestrators can check container health.');
+    if(!hasMultiStage && runCount > 2) optimization.push('Single-stage build with multiple RUN steps — consider multi-stage build to keep the final image small.');
+    if(aptUpdateSplit) optimization.push('apt-get update in a separate RUN from install — combine them to avoid stale cache: RUN apt-get update && apt-get install -y ...');
+
+    const secLines = security.length ? security.map(s=>`  ⚠ ${s}`).join('\n') : '  ✓ No critical security issues found.';
+    const optLines = optimization.length ? optimization.map(s=>`  → ${s}`).join('\n') : '  ✓ No obvious optimizations needed.';
+    const bpLines  = bestPractice.length ? bestPractice.map(s=>`  ★ ${s}`).join('\n') : '  ✓ Best practices look good.';
+
+    // Generate improved version
+    const fromLine = lines.find(l => /^FROM\s/i.test(l.trim())) || 'FROM node:20-alpine';
+    const improved = `# Improved Dockerfile — generated by KubeLab offline linter
+
+# ── Build stage ─────────────────────────────────────────────────────────────
+FROM ${fromLine.replace(/^FROM\s+/i,'').trim().replace(/:latest/,':stable')} AS builder
+
+WORKDIR /app
+
+# Copy dependency manifests first (better layer caching)
+COPY package*.json ./
+RUN npm ci --only=production
+
+COPY . .
+RUN npm run build 2>/dev/null || true
+
+# ── Runtime stage (distroless for minimal attack surface) ───────────────────
+FROM ${fromLine.replace(/^FROM\s+/i,'').trim().replace(/:latest/,':stable')}
+
+# Create non-root user
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+
+WORKDIR /app
+
+# Copy only built artifacts from builder
+COPY --from=builder --chown=appuser:appgroup /app/dist ./dist
+COPY --from=builder --chown=appuser:appgroup /app/node_modules ./node_modules
+
+USER appuser
+
+EXPOSE 8080
+
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \\
+  CMD wget -qO- http://localhost:8080/healthz || exit 1
+
+CMD ["node", "dist/index.js"]`;
+
+    outEl.textContent =
+`SECURITY ISSUES
+${secLines}
+
+OPTIMIZATION
+${optLines}
+
+BEST PRACTICES
+${bpLines}
+
+─────────────────────────────────────────────
+IMPROVED VERSION (template — adapt to your app):
+
+${improved}
+
+─────────────────────────────────────────────
+Generated offline by KubeLab — kubelab.eknathalabs.com`;
+
+  // ── YAML GENERATOR ──────────────────────────────────────────────────────────
   } else if(id==='yaml-gen') {
-    // ── FULLY OFFLINE YAML GENERATOR ──
-    outEl.classList.remove('loading-dots');
     outEl.style.color = 'var(--green)';
     outEl.textContent = generateK8sYAML();
     return;
-  }
-
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
-        max_tokens:1000,
-        messages:[{role:'user',content:prompt}]
-      })
-    });
-    const data = await res.json();
-    const text = data.content?.map(b=>b.text||'').join('') || 'No response received.';
-    outEl.classList.remove('loading-dots');
-    outEl.style.color='var(--text)';
-    outEl.textContent=text;
-  } catch(e) {
-    outEl.classList.remove('loading-dots');
-    outEl.style.color='var(--red)';
-    outEl.textContent='Error: '+e.message;
   }
 }
 
