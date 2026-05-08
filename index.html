@@ -366,7 +366,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:2.
 
 <div class="stats">
   <div class="stat"><div class="stat-num">12</div><div class="stat-label">Modules</div></div>
-  <div class="stat"><div class="stat-num">8</div><div class="stat-label">AI Tools</div></div>
+  <div class="stat"><div class="stat-num">9</div><div class="stat-label">Tools</div></div>
   <div class="stat"><div class="stat-num">200+</div><div class="stat-label">Commands</div></div>
   <div class="stat"><div class="stat-num">100</div><div class="stat-label">Quiz Q&amp;A</div></div>
   <div class="stat"><div class="stat-num">12</div><div class="stat-label">Labs</div></div>
@@ -384,8 +384,8 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:2.
     </div>
     <div class="tool-card" onclick="showPage('tools')">
       <div class="tool-icon ti-green">🤖</div>
-      <div class="tool-title">8 AI-Powered Tools</div>
-      <div class="tool-desc">Troubleshooter, YAML explainer, RBAC generator, PromQL builder and more.</div>
+      <div class="tool-title">9 Tools — incl. Offline YAML Generator</div>
+      <div class="tool-desc">Troubleshooter, YAML generator (offline), RBAC generator, PromQL builder and more.</div>
     </div>
     <div class="tool-card" onclick="showPage('cheatsheet')">
       <div class="tool-icon ti-yellow">⌘</div>
@@ -456,8 +456,8 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:2.
 <div class="section-wrap">
   <div class="section-header">
     <div class="section-tag">Interactive AI Tools</div>
-    <h2 class="section-title">Built-in K8s Tools <span class="ai-badge">✦ AI Powered</span></h2>
-    <p class="section-desc">Paste, generate, and understand Kubernetes manifests, errors, and policies — without leaving the page.</p>
+    <h2 class="section-title">Built-in K8s Tools <span class="ai-badge">✦ AI + Offline</span></h2>
+    <p class="section-desc">Paste, generate, and understand Kubernetes manifests, errors, and policies — including a fully offline YAML generator, no internet required.</p>
   </div>
   <div class="tools-grid" id="toolsGrid"></div>
   <div id="toolPanelContainer" style="margin-top:1.5rem;"></div>
@@ -1264,9 +1264,551 @@ const TOOLS = [
         <textarea class="tool-input" id="t-dockerfile-lint" placeholder="FROM ubuntu:latest\nRUN apt-get update\n..." rows="8"></textarea>
         <button class="btn-primary" onclick="runTool('dockerfile-lint')">🐳 Lint Dockerfile <span class="ai-badge">AI</span></button>`
   },
+  {id:'yaml-gen',icon:'⚡',cls:'ti-green',title:'YAML File Generator',desc:'Select resource kind, fill in fields → get a complete, production-ready Kubernetes YAML manifest. Fully offline — no API needed.',
+    ui:`<div style="display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;color:var(--green);background:rgba(34,211,165,0.1);border:1px solid rgba(34,211,165,0.2);border-radius:4px;padding:3px 8px;margin-bottom:12px;">⚡ 100% Offline — no API call</div>
+        <div class="tool-row">
+          <div class="tool-field">
+            <label>Resource Kind</label>
+            <select class="tool-select" id="yaml-kind" style="width:100%;" onchange="yamlGenKindChange()">
+              <option value="Deployment">Deployment</option>
+              <option value="StatefulSet">StatefulSet</option>
+              <option value="DaemonSet">DaemonSet</option>
+              <option value="Job">Job</option>
+              <option value="CronJob">CronJob</option>
+              <option value="Service">Service</option>
+              <option value="Ingress">Ingress</option>
+              <option value="ConfigMap">ConfigMap</option>
+              <option value="Secret">Secret</option>
+              <option value="PersistentVolumeClaim">PersistentVolumeClaim</option>
+              <option value="HorizontalPodAutoscaler">HorizontalPodAutoscaler</option>
+              <option value="NetworkPolicy">NetworkPolicy</option>
+              <option value="ServiceAccount">ServiceAccount</option>
+              <option value="Namespace">Namespace</option>
+            </select>
+          </div>
+          <div class="tool-field">
+            <label>Name</label>
+            <input class="tool-input" id="yaml-name" placeholder="my-app" style="min-height:40px;resize:none;">
+          </div>
+        </div>
+        <div class="tool-row">
+          <div class="tool-field">
+            <label>Namespace</label>
+            <input class="tool-input" id="yaml-ns" placeholder="default" style="min-height:40px;resize:none;">
+          </div>
+          <div class="tool-field" id="yaml-image-field">
+            <label>Container Image</label>
+            <input class="tool-input" id="yaml-image" placeholder="nginx:1.25" style="min-height:40px;resize:none;">
+          </div>
+        </div>
+        <div class="tool-row" id="yaml-row-replicas">
+          <div class="tool-field">
+            <label>Replicas</label>
+            <input class="tool-input" id="yaml-replicas" placeholder="3" style="min-height:40px;resize:none;">
+          </div>
+          <div class="tool-field">
+            <label>Container Port</label>
+            <input class="tool-input" id="yaml-port" placeholder="8080" style="min-height:40px;resize:none;">
+          </div>
+        </div>
+        <div class="tool-row" id="yaml-row-resources">
+          <div class="tool-field">
+            <label>CPU Request / Limit</label>
+            <input class="tool-input" id="yaml-cpu" placeholder="100m / 500m" style="min-height:40px;resize:none;">
+          </div>
+          <div class="tool-field">
+            <label>Memory Request / Limit</label>
+            <input class="tool-input" id="yaml-mem" placeholder="128Mi / 256Mi" style="min-height:40px;resize:none;">
+          </div>
+        </div>
+        <div class="tool-row" id="yaml-row-labels">
+          <div class="tool-field">
+            <label>Extra Labels (key=value, comma separated)</label>
+            <input class="tool-input" id="yaml-labels" placeholder="env=prod, team=backend" style="min-height:40px;resize:none;">
+          </div>
+          <div class="tool-field" id="yaml-svctype-field">
+            <label>Service Type (for Service kind)</label>
+            <select class="tool-select" id="yaml-svctype" style="width:100%;">
+              <option value="ClusterIP">ClusterIP</option>
+              <option value="NodePort">NodePort</option>
+              <option value="LoadBalancer">LoadBalancer</option>
+            </select>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:0.75rem;">
+          <label style="font-family:var(--mono);font-size:11px;color:var(--text3);display:flex;align-items:center;gap:6px;cursor:pointer;">
+            <input type="checkbox" id="yaml-opt-probes" checked style="accent-color:var(--accent);"> Liveness/Readiness Probes
+          </label>
+          <label style="font-family:var(--mono);font-size:11px;color:var(--text3);display:flex;align-items:center;gap:6px;cursor:pointer;">
+            <input type="checkbox" id="yaml-opt-secctx" checked style="accent-color:var(--accent);"> Security Context
+          </label>
+          <label style="font-family:var(--mono);font-size:11px;color:var(--text3);display:flex;align-items:center;gap:6px;cursor:pointer;">
+            <input type="checkbox" id="yaml-opt-hpa"> Include HPA
+          </label>
+          <label style="font-family:var(--mono);font-size:11px;color:var(--text3);display:flex;align-items:center;gap:6px;cursor:pointer;">
+            <input type="checkbox" id="yaml-opt-pdb"> Include PodDisruptionBudget
+          </label>
+        </div>
+        <button class="btn-green" onclick="runTool('yaml-gen')">⚡ Generate YAML — Offline</button>`
+  },
 ];
 
 let activeToolId = null;
+
+// ════════════════════════════════════════════
+// OFFLINE YAML GENERATOR
+// ════════════════════════════════════════════
+function yamlGenKindChange() {
+  const kind = document.getElementById('yaml-kind').value;
+  const hasContainers = ['Deployment','StatefulSet','DaemonSet','Job','CronJob'].includes(kind);
+  const r = (id, show) => { const el = document.getElementById(id); if(el) el.style.display = show ? '' : 'none'; };
+  r('yaml-image-field', hasContainers);
+  r('yaml-row-replicas', ['Deployment','StatefulSet'].includes(kind));
+  r('yaml-row-resources', hasContainers);
+  r('yaml-svctype-field', kind === 'Service');
+}
+
+function parseLabels(raw) {
+  if(!raw || !raw.trim()) return {};
+  const obj = {};
+  raw.split(',').forEach(pair => {
+    const [k, v] = pair.split('=').map(s => s.trim());
+    if(k) obj[k] = v || 'true';
+  });
+  return obj;
+}
+
+function fmtLabels(obj, indent) {
+  return Object.entries(obj).map(([k,v]) => `${indent}${k}: "${v}"`).join('\n');
+}
+
+function generateK8sYAML() {
+  const kind     = document.getElementById('yaml-kind').value;
+  const name     = (document.getElementById('yaml-name').value.trim() || 'my-app').toLowerCase().replace(/[^a-z0-9-]/g,'-');
+  const ns       = document.getElementById('yaml-ns').value.trim() || 'default';
+  const image    = document.getElementById('yaml-image').value.trim() || 'nginx:1.25';
+  const replicas = parseInt(document.getElementById('yaml-replicas').value) || 3;
+  const port     = parseInt(document.getElementById('yaml-port').value) || 8080;
+  const cpuRaw   = document.getElementById('yaml-cpu').value || '100m / 500m';
+  const memRaw   = document.getElementById('yaml-mem').value || '128Mi / 256Mi';
+  const svcType  = document.getElementById('yaml-svctype').value;
+  const extraLabels = parseLabels(document.getElementById('yaml-labels').value);
+  const withProbes  = document.getElementById('yaml-opt-probes').checked;
+  const withSecCtx  = document.getElementById('yaml-opt-secctx').checked;
+  const withHPA     = document.getElementById('yaml-opt-hpa').checked;
+  const withPDB     = document.getElementById('yaml-opt-pdb').checked;
+
+  const [cpuReq, cpuLim] = cpuRaw.split('/').map(s => s.trim());
+  const [memReq, memLim] = memRaw.split('/').map(s => s.trim());
+
+  const baseLabels = { app: name, ...extraLabels };
+  const labelsYaml = fmtLabels(baseLabels, '    ');
+  const selectorYaml = fmtLabels({ app: name }, '      ');
+  const podLabelsYaml = fmtLabels(baseLabels, '        ');
+
+  const metaBlock = `apiVersion: apps/v1
+kind: ${kind}
+metadata:
+  name: ${name}
+  namespace: ${ns}
+  labels:
+${labelsYaml}`;
+
+  const probesBlock = withProbes ? `
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: ${port}
+          initialDelaySeconds: 15
+          periodSeconds: 20
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: ${port}
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          successThreshold: 1` : '';
+
+  const secCtxBlock = withSecCtx ? `
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 2000
+        seccompProfile:
+          type: RuntimeDefault` : '';
+
+  const containerSecCtx = withSecCtx ? `
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+              - ALL` : '';
+
+  const containerBlock = `
+      containers:
+      - name: ${name}
+        image: ${image}
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: http
+          containerPort: ${port}
+          protocol: TCP
+        resources:
+          requests:
+            cpu: "${cpuReq || '100m'}"
+            memory: "${memReq || '128Mi'}"
+          limits:
+            cpu: "${cpuLim || '500m'}"
+            memory: "${memLim || '256Mi'}"${probesBlock}${containerSecCtx}`;
+
+  const hpaYaml = withHPA ? `
+---
+# HorizontalPodAutoscaler
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: ${name}-hpa
+  namespace: ${ns}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: ${['Deployment','StatefulSet','DaemonSet'].includes(kind) ? kind : 'Deployment'}
+    name: ${name}
+  minReplicas: 2
+  maxReplicas: ${Math.max(replicas * 2, 10)}
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80` : '';
+
+  const pdbYaml = withPDB ? `
+---
+# PodDisruptionBudget — ensures min availability during disruptions
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: ${name}-pdb
+  namespace: ${ns}
+spec:
+  minAvailable: ${Math.max(1, Math.floor(replicas / 2))}
+  selector:
+    matchLabels:
+      app: ${name}` : '';
+
+  let yaml = '';
+
+  if(kind === 'Deployment') {
+    yaml = `${metaBlock}
+spec:
+  replicas: ${replicas}
+  selector:
+    matchLabels:
+${selectorYaml}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+${podLabelsYaml}
+    spec:${secCtxBlock}
+      terminationGracePeriodSeconds: 30
+      restartPolicy: Always${containerBlock}`;
+  } else if(kind === 'StatefulSet') {
+    yaml = `${metaBlock}
+spec:
+  replicas: ${replicas}
+  selector:
+    matchLabels:
+${selectorYaml}
+  serviceName: "${name}-headless"
+  updateStrategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+${podLabelsYaml}
+    spec:${secCtxBlock}
+      terminationGracePeriodSeconds: 30${containerBlock}
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      storageClassName: standard
+      resources:
+        requests:
+          storage: 1Gi`;
+  } else if(kind === 'DaemonSet') {
+    yaml = `${metaBlock}
+spec:
+  selector:
+    matchLabels:
+${selectorYaml}
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+${podLabelsYaml}
+    spec:${secCtxBlock}
+      tolerations:
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
+        effect: NoSchedule
+      terminationGracePeriodSeconds: 30${containerBlock}`;
+  } else if(kind === 'Job') {
+    yaml = `apiVersion: batch/v1
+kind: Job
+metadata:
+  name: ${name}
+  namespace: ${ns}
+  labels:
+${labelsYaml}
+spec:
+  backoffLimit: 4
+  completions: 1
+  parallelism: 1
+  ttlSecondsAfterFinished: 300
+  template:
+    metadata:
+      labels:
+${podLabelsYaml}
+    spec:${secCtxBlock}
+      restartPolicy: OnFailure${containerBlock}`;
+  } else if(kind === 'CronJob') {
+    yaml = `apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: ${name}
+  namespace: ${ns}
+  labels:
+${labelsYaml}
+spec:
+  schedule: "0 * * * *"     # every hour — adjust as needed
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      template:
+        metadata:
+          labels:
+${podLabelsYaml}
+        spec:${secCtxBlock}
+          restartPolicy: OnFailure${containerBlock}`;
+  } else if(kind === 'Service') {
+    yaml = `apiVersion: v1
+kind: Service
+metadata:
+  name: ${name}
+  namespace: ${ns}
+  labels:
+${labelsYaml}
+spec:
+  type: ${svcType}
+  selector:
+    app: ${name}
+  ports:
+  - name: http
+    port: 80
+    targetPort: ${port}
+    protocol: TCP${svcType === 'NodePort' ? '\n    nodePort: 30080  # 30000-32767' : ''}`;
+  } else if(kind === 'Ingress') {
+    yaml = `apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ${name}
+  namespace: ${ns}
+  labels:
+${labelsYaml}
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: ${name}.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: ${name}
+            port:
+              number: 80
+  tls:
+  - hosts:
+    - ${name}.example.com
+    secretName: ${name}-tls`;
+  } else if(kind === 'ConfigMap') {
+    yaml = `apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ${name}
+  namespace: ${ns}
+  labels:
+${labelsYaml}
+data:
+  # Key-value pairs
+  ENV: "production"
+  LOG_LEVEL: "info"
+  # Multi-line config file
+  app.properties: |
+    server.port=${port}
+    log.level=INFO
+    feature.flag=true`;
+  } else if(kind === 'Secret') {
+    yaml = `apiVersion: v1
+kind: Secret
+metadata:
+  name: ${name}
+  namespace: ${ns}
+  labels:
+${labelsYaml}
+type: Opaque
+# Values must be base64 encoded: echo -n 'value' | base64
+stringData:
+  # stringData accepts plain text — K8s encodes on write
+  DB_PASSWORD: "changeme"
+  API_KEY: "replace-with-real-key"
+  db-url: "postgresql://user:password@host:5432/dbname"`;
+  } else if(kind === 'PersistentVolumeClaim') {
+    yaml = `apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ${name}
+  namespace: ${ns}
+  labels:
+${labelsYaml}
+spec:
+  accessModes:
+  - ReadWriteOnce        # RWO: one node | RWX: many nodes | ROX: read-only many
+  storageClassName: standard  # kubectl get storageclass to list available classes
+  resources:
+    requests:
+      storage: 5Gi`;
+  } else if(kind === 'HorizontalPodAutoscaler') {
+    yaml = `apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: ${name}
+  namespace: ${ns}
+  labels:
+${labelsYaml}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: ${name}
+  minReplicas: 2
+  maxReplicas: ${Math.max(replicas * 2, 10)}
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300   # wait 5min before scaling down
+      policies:
+      - type: Percent
+        value: 10
+        periodSeconds: 60`;
+  } else if(kind === 'NetworkPolicy') {
+    yaml = `apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: ${name}
+  namespace: ${ns}
+  labels:
+${labelsYaml}
+spec:
+  podSelector:
+    matchLabels:
+      app: ${name}
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: ${ns}
+    - podSelector:
+        matchLabels:
+          role: frontend
+    ports:
+    - protocol: TCP
+      port: ${port}
+  egress:
+  - to:
+    - namespaceSelector: {}     # allow DNS
+    ports:
+    - protocol: UDP
+      port: 53
+  - to:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+        except:
+        - 169.254.0.0/16        # block metadata server
+    ports:
+    - protocol: TCP
+      port: 443`;
+  } else if(kind === 'ServiceAccount') {
+    yaml = `apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: ${name}
+  namespace: ${ns}
+  labels:
+${labelsYaml}
+  annotations:
+    # Uncomment for GKE Workload Identity:
+    # iam.gke.io/gcp-service-account: gsa@PROJECT.iam.gserviceaccount.com
+automountServiceAccountToken: false  # disable unless needed — security best practice`;
+  } else if(kind === 'Namespace') {
+    yaml = `apiVersion: v1
+kind: Namespace
+metadata:
+  name: ${name}
+  labels:
+${labelsYaml}
+    # Label required for NetworkPolicy namespace selectors:
+    kubernetes.io/metadata.name: "${name}"
+    # Uncomment to apply Pod Security Standards:
+    # pod-security.kubernetes.io/enforce: restricted
+    # pod-security.kubernetes.io/audit: restricted
+    # pod-security.kubernetes.io/warn: restricted`;
+  }
+
+  return yaml + hpaYaml + pdbYaml + `\n\n# Generated by KubeLab YAML Generator — kubelab.eknathalabs.com`;
+}
 
 function renderTools() {
   const grid = document.getElementById('toolsGrid');
@@ -1296,13 +1838,44 @@ function openTool(id) {
       <div class="tool-panel-body">
         ${t.ui}
         <div style="margin-top:1rem;">
-          <div style="font-family:var(--mono);font-size:11px;color:var(--text3);margin-bottom:6px;">Output:</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+            <div style="font-family:var(--mono);font-size:11px;color:var(--text3);">Output:</div>
+            ${id==='yaml-gen'?`<div style="display:flex;gap:8px;">
+              <button onclick="copyYamlOutput()" style="font-family:var(--mono);font-size:10px;color:var(--green);background:rgba(34,211,165,0.1);border:1px solid rgba(34,211,165,0.2);border-radius:4px;padding:4px 10px;cursor:pointer;">📋 Copy YAML</button>
+              <button onclick="downloadYamlOutput('${id}')" style="font-family:var(--mono);font-size:10px;color:var(--accent2);background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2);border-radius:4px;padding:4px 10px;cursor:pointer;">⬇ Download .yaml</button>
+            </div>`:''}
+          </div>
           <div class="tool-output" id="output-${id}">Ready. Fill in the fields above and click the button.</div>
         </div>
       </div>
     </div>
   `;
   container.scrollIntoView({behavior:'smooth',block:'start'});
+  // Initialize YAML generator kind visibility
+  if(id==='yaml-gen') setTimeout(yamlGenKindChange, 0);
+}
+
+function copyYamlOutput() {
+  const txt = document.getElementById('output-yaml-gen')?.textContent || '';
+  navigator.clipboard.writeText(txt).catch(()=>{});
+  const btn = event.target;
+  const orig = btn.textContent;
+  btn.textContent = '✓ Copied!';
+  btn.style.color = 'var(--green)';
+  setTimeout(()=>{ btn.textContent=orig; btn.style.color=''; }, 1200);
+}
+
+function downloadYamlOutput() {
+  const txt = document.getElementById('output-yaml-gen')?.textContent || '';
+  if(!txt || txt.startsWith('Ready')) return;
+  const name = (document.getElementById('yaml-name')?.value.trim() || 'manifest').toLowerCase().replace(/[^a-z0-9-]/g,'-');
+  const kind = (document.getElementById('yaml-kind')?.value || 'resource').toLowerCase();
+  const blob = new Blob([txt], {type:'text/yaml'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `${name}-${kind}.yaml`;
+  a.click();
+  URL.revokeObjectURL(a.href);
 }
 
 async function runTool(id) {
@@ -1402,6 +1975,12 @@ Provide:
 4. IMPROVED VERSION: Rewrite the Dockerfile with all issues fixed, with comments
 
 Plain text with clear sections.`;
+  } else if(id==='yaml-gen') {
+    // ── FULLY OFFLINE YAML GENERATOR ──
+    outEl.classList.remove('loading-dots');
+    outEl.style.color = 'var(--green)';
+    outEl.textContent = generateK8sYAML();
+    return;
   }
 
   try {
