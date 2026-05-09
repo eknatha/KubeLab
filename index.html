@@ -411,7 +411,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:2.
 </div>
 <footer>
   <div class="footer-logo"><span style="color:var(--accent2)">Kube</span><span style="background:linear-gradient(135deg,var(--green),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Lab</span></div>
-  <div class="footer-sub">kubelab.eknathalabs.com · Built by Eknatha Reddy Puli · Platform Engineer</div>
+  <div class="footer-sub">kubelab.eknathalabs.com · Built by Eknatha Reddy · Platform Engineer</div>
   <div class="footer-links">
     <a href="https://eknathalabs.com" target="_blank">eknathalabs.com</a>
     <a href="https://github.com/eknatha" target="_blank">GitHub</a>
@@ -633,7 +633,7 @@ ETCDCTL_API=3 etcdctl snapshot save /backup/etcd.db \\
   --cacert=/etc/etcd/ca.crt \\
   --cert=/etc/etcd/etcd.crt \\
   --key=/etc/etcd/etcd.key`,
-    resources:['Kubernetes Architecture Docs','CKA Exam Curriculum','Kelsey Hightower Kubernetes The Hard Way']
+    resources:[{label:'Kubernetes Components',url:'https://kubernetes.io/docs/concepts/overview/components/'},{label:'CKA Exam Curriculum (CNCF)',url:'https://github.com/cncf/curriculum/blob/master/CKA_Curriculum.pdf'},{label:'Kubernetes the Hard Way',url:'https://github.com/kelseyhightower/kubernetes-the-hard-way'},{label:'etcd Documentation',url:'https://etcd.io/docs/'},{label:'kube-scheduler Docs',url:'https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/'}]
   },
   {
     num:'02', icon:'📦', title:'Pods & Workloads', level:'beginner', tags:['cka'],
@@ -681,7 +681,7 @@ spec:
           limits:
             cpu: "500m"
             memory: "256Mi"`,
-    resources:['Kubernetes Workloads Docs','CKA Workloads Domain']
+    resources:[{label:'Workloads — Pods',url:'https://kubernetes.io/docs/concepts/workloads/pods/'},{label:'Deployments',url:'https://kubernetes.io/docs/concepts/workloads/controllers/deployment/'},{label:'StatefulSets',url:'https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/'},{label:'DaemonSets',url:'https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/'},{label:'Jobs & CronJobs',url:'https://kubernetes.io/docs/concepts/workloads/controllers/job/'}]
   },
   {
     num:'03', icon:'🌐', title:'Networking', level:'intermediate', tags:['cka','cks'],
@@ -724,7 +724,7 @@ spec:
     ports:
     - protocol: TCP
       port: 8080`,
-    resources:['Kubernetes Networking Docs','CNI Spec','Ingress Controllers Comparison']
+    resources:[{label:'Cluster Networking',url:'https://kubernetes.io/docs/concepts/cluster-administration/networking/'},{label:'Service Types',url:'https://kubernetes.io/docs/concepts/services-networking/service/'},{label:'Ingress',url:'https://kubernetes.io/docs/concepts/services-networking/ingress/'},{label:'Network Policies',url:'https://kubernetes.io/docs/concepts/services-networking/network-policies/'},{label:'CNI Spec (GitHub)',url:'https://github.com/containernetworking/cni'},{label:'Ingress Controllers Comparison',url:'https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/'}]
   },
   {
     num:'04', icon:'💾', title:'Storage & Volumes', level:'intermediate', tags:['cka'],
@@ -766,7 +766,7 @@ volumes:
 volumeMounts:
 - name: data
   mountPath: /data`,
-    resources:['K8s Storage Docs','CSI Drivers List','CKA Storage Domain']
+    resources:[{label:'Persistent Volumes',url:'https://kubernetes.io/docs/concepts/storage/persistent-volumes/'},{label:'Storage Classes',url:'https://kubernetes.io/docs/concepts/storage/storage-classes/'},{label:'CSI Drivers (official list)',url:'https://kubernetes-csi.github.io/docs/drivers.html'},{label:'Volumes',url:'https://kubernetes.io/docs/concepts/storage/volumes/'},{label:'Dynamic Volume Provisioning',url:'https://kubernetes.io/docs/concepts/storage/dynamic-provisioning/'}]
   },
   {
     num:'05', icon:'🔐', title:'RBAC & Security', level:'intermediate', tags:['cka','cks'],
@@ -813,7 +813,7 @@ roleRef:
   kind: Role
   name: deployer
   apiGroup: rbac.authorization.k8s.io`,
-    resources:['RBAC Docs','CKS Security Domain','Pod Security Standards']
+    resources:[{label:'RBAC Authorization',url:'https://kubernetes.io/docs/reference/access-authn-authz/rbac/'},{label:'Pod Security Standards',url:'https://kubernetes.io/docs/concepts/security/pod-security-standards/'},{label:'Managing Service Accounts',url:'https://kubernetes.io/docs/reference/access-authn-authz/service-accounts-admin/'},{label:'Secrets',url:'https://kubernetes.io/docs/concepts/configuration/secret/'},{label:'CKS Exam Curriculum',url:'https://github.com/cncf/curriculum/blob/master/CKS_Curriculum.pdf'}]
   },
   {
     num:'06', icon:'⚙️', title:'Config & Secrets', level:'beginner', tags:['cka'],
@@ -853,7 +853,7 @@ spec:
   - name: config-vol
     configMap:
       name: app-config`,
-    resources:['ConfigMap Docs','Secret Management Best Practices','External Secrets Operator']
+    resources:[{label:'ConfigMaps',url:'https://kubernetes.io/docs/concepts/configuration/configmap/'},{label:'Secrets',url:'https://kubernetes.io/docs/concepts/configuration/secret/'},{label:'Encrypting Secret Data at Rest',url:'https://kubernetes.io/docs/tasks/administer-cluster/encrypt-data/'},{label:'External Secrets Operator',url:'https://external-secrets.io/latest/'},{label:'Sealed Secrets (Bitnami)',url:'https://github.com/bitnami-labs/sealed-secrets'}]
   },
   {
     num:'07', icon:'📈', title:'Scaling & Scheduling', level:'intermediate', tags:['cka'],
@@ -900,7 +900,7 @@ spec:
       target:
         type: AverageValue
         averageValue: 200Mi`,
-    resources:['HPA Docs','KEDA Docs','Scheduling Framework']
+    resources:[{label:'Horizontal Pod Autoscaling',url:'https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/'},{label:'Vertical Pod Autoscaler (GitHub)',url:'https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler'},{label:'KEDA — Event-driven Autoscaling',url:'https://keda.sh/docs/'},{label:'Assigning Pods to Nodes',url:'https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/'},{label:'Taints and Tolerations',url:'https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/'},{label:'Pod Disruption Budgets',url:'https://kubernetes.io/docs/tasks/run-application/configure-pdb/'}]
   },
   {
     num:'08', icon:'🔭', title:'Observability', level:'intermediate', tags:['cka'],
@@ -939,7 +939,7 @@ spec:
   - port: metrics
     interval: 30s
     path: /metrics`,
-    resources:['Prometheus Operator','Grafana Dashboards','Loki Docs']
+    resources:[{label:'Metrics Server (GitHub)',url:'https://github.com/kubernetes-sigs/metrics-server'},{label:'Prometheus Operator',url:'https://prometheus-operator.dev/docs/getting-started/introduction/'},{label:'kube-prometheus-stack (Helm)',url:'https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack'},{label:'Grafana Kubernetes Dashboards',url:'https://grafana.com/grafana/dashboards/?search=kubernetes'},{label:'Loki — Log Aggregation',url:'https://grafana.com/docs/loki/latest/'},{label:'OpenTelemetry for Kubernetes',url:'https://opentelemetry.io/docs/kubernetes/'}]
   },
   {
     num:'09', icon:'🪖', title:'Helm & Package Mgmt', level:'intermediate', tags:['cka'],
@@ -979,7 +979,7 @@ resources:
   requests:
     cpu: 100m
     memory: 128Mi`,
-    resources:['Helm Docs','Artifact Hub','Helm Best Practices']
+    resources:[{label:'Helm Documentation',url:'https://helm.sh/docs/'},{label:'Artifact Hub — Chart Registry',url:'https://artifacthub.io/'},{label:'Helm Best Practices Guide',url:'https://helm.sh/docs/chart_best_practices/'},{label:'Chart Template Guide',url:'https://helm.sh/docs/chart_template_guide/'},{label:'Helm Hooks',url:'https://helm.sh/docs/topics/charts_hooks/'}]
   },
   {
     num:'10', icon:'🔄', title:'GitOps & ArgoCD', level:'advanced', tags:['cks'],
@@ -1020,7 +1020,7 @@ spec:
     automated:
       prune: true
       selfHeal: true`,
-    resources:['ArgoCD Docs','Flux Docs','GitOps Principles']
+    resources:[{label:'ArgoCD Documentation',url:'https://argo-cd.readthedocs.io/en/stable/'},{label:'Flux CD Documentation',url:'https://fluxcd.io/flux/'},{label:'OpenGitOps Principles',url:'https://opengitops.dev/'},{label:'ArgoCD App of Apps Pattern',url:'https://argo-cd.readthedocs.io/en/stable/operator-manual/cluster-bootstrapping/'},{label:'Flux vs ArgoCD Comparison',url:'https://earthly.dev/blog/argocd-vs-fluxcd/'}]
   },
   {
     num:'11', icon:'🛡️', title:'CKS Security Deep Dive', level:'advanced', tags:['cks'],
@@ -1065,7 +1065,7 @@ spec:
       type: RuntimeDefault
     runAsNonRoot: true
     runAsUser: 1000`,
-    resources:['CKS Exam Curriculum','Falco Docs','OPA Gatekeeper Docs']
+    resources:[{label:'CKS Exam Curriculum (CNCF)',url:'https://github.com/cncf/curriculum/blob/master/CKS_Curriculum.pdf'},{label:'Falco — Runtime Security',url:'https://falco.org/docs/'},{label:'OPA Gatekeeper',url:'https://open-policy-agent.github.io/gatekeeper/website/'},{label:'Trivy — Security Scanner',url:'https://aquasecurity.github.io/trivy/'},{label:'AppArmor in Kubernetes',url:'https://kubernetes.io/docs/tutorials/security/apparmor/'},{label:'Seccomp Profiles',url:'https://kubernetes.io/docs/tutorials/security/seccomp/'}]
   },
   {
     num:'12', icon:'☁️', title:'GKE & Cloud K8s', level:'advanced', tags:['cks'],
@@ -1103,7 +1103,7 @@ gcloud iam service-accounts add-iam-policy-binding \\
 # 4. Annotate K8s SA
 kubectl annotate serviceaccount ksa --namespace app \\
   iam.gke.io/gcp-service-account=gsa@PROJECT_ID.iam.gserviceaccount.com`,
-    resources:['GKE Docs','Workload Identity Guide','Anthos Docs']
+    resources:[{label:'GKE Documentation',url:'https://cloud.google.com/kubernetes-engine/docs'},{label:'GKE Autopilot Overview',url:'https://cloud.google.com/kubernetes-engine/docs/concepts/autopilot-overview'},{label:'Workload Identity for GKE',url:'https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity'},{label:'Cloud Armor with GKE Ingress',url:'https://cloud.google.com/armor/docs/armor-backend-policy'},{label:'Anthos Documentation',url:'https://cloud.google.com/anthos/docs'},{label:'GKE Node Pools',url:'https://cloud.google.com/kubernetes-engine/docs/concepts/node-pools'}]
   },
 ];
 
@@ -1158,7 +1158,7 @@ function openModule(idx) {
       </div>
       <div class="modal-section">
         <h3>Study Resources</h3>
-        <ul>${m.resources.map(r=>`<li>${r}</li>`).join('')}</ul>
+        <ul>${m.resources.map(r=>`<li><a href="${r.url}" target="_blank" rel="noopener" style="color:var(--accent2);text-decoration:none;font-size:0.88rem;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">↗ ${r.label}</a></li>`).join('')}</ul>
       </div>
     </div>
   `;
